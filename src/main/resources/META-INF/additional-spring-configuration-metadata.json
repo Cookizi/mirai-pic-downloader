@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "bot.apiUrl",
+      "type": "java.lang.String",
+      "description": "Mirai Host."
+    },
+    {
+      "name": "bot.wsUrl",
+      "type": "java.lang.String",
+      "description": "Description for bot.ws-url."
+    }
+  ] }
