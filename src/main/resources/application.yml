@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: pic-saver-core
+
+server:
+  port: 8081
+#management.endpoints.web.exposure.include=*
+
+#bot设置
+bot:
+  qq: 2044827989
+  authKey: 12345678
+  #不启动浏览器界面
+  driver:
+    headless: false
+
+#log设置
+logging:
+  level:
+    root: info
+    top:
+      cookizi: debug
