@@ -17,7 +17,7 @@ import top.cookizi.saver.data.enums.DriverType;
 @Data
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
-//@PropertySource("classpath:application.properties")
+//@PropertySource("classpath:application.yml")
 @ConfigurationProperties(prefix = "bot.driver", ignoreInvalidFields = true)
 public class SeleniumConfig {
     String path;

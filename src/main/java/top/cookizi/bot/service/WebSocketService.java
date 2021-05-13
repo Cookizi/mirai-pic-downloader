@@ -5,8 +5,9 @@ import okhttp3.Request;
 import okhttp3.WebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.cookizi.bot.common.constant.CommonConst;
 import top.cookizi.bot.config.AppConfig;
-import top.cookizi.bot.config.MiraiWebSocketListener;
+import top.cookizi.bot.listener.MiraiWebSocketListener;
 
 @Service
 public class WebSocketService {
@@ -22,7 +23,8 @@ public class WebSocketService {
 
     public synchronized void connect() {
         String session = miraiApiService.enableWebsocket();
-
+        System.out.println(session);
+        CommonConst.setSession(session);
         OkHttpClient client = new OkHttpClient.Builder()
                 .retryOnConnectionFailure(true)
                 .build();

@@ -15,7 +15,7 @@ import top.cookizi.bot.manage.mirai.MiraiApiClient;
 
 @Component
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.yml")
 public class FeignClientConfig {
 
     @Autowired

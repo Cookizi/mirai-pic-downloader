@@ -2,10 +2,10 @@ package top.cookizi.bot.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import top.cookizi.bot.common.utils.StringUtils;
 import top.cookizi.bot.modle.msg.FriendMsg;
 import top.cookizi.bot.modle.msg.GroupMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
-import top.cookizi.bot.common.utils.StringUtils;
 
 @Getter
 @AllArgsConstructor
@@ -30,6 +30,16 @@ public enum MsgType {
         }
         for (MsgType value : MsgType.values()) {
             if (value.type.equals(type)) return value;
+        }
+        return NON;
+    }
+
+    public static MsgType parse(Class<? extends MsgResp> clazz) {
+        if (clazz == null) {
+            return NON;
+        }
+        for (MsgType value : MsgType.values()) {
+            if (value.clazz.equals(clazz)) return value;
         }
         return NON;
     }

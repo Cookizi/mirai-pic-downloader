@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Data
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
-//@PropertySource("classpath:application.properties")
+//@PropertySource("classpath:application.yml")
 @ConfigurationProperties(prefix = "bot", ignoreInvalidFields = true)
 public class AppConfig {
     String authKey;

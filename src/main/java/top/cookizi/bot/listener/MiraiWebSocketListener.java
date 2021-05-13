@@ -1,4 +1,4 @@
-package top.cookizi.bot.config;
+package top.cookizi.bot.listener;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.modle.resp.MsgResp;
 import top.cookizi.bot.service.MsgHandleService;
 import top.cookizi.bot.service.MiraiApiService;

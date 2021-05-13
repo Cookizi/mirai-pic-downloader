@@ -9,14 +9,14 @@ import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public  class MsgResp {
+public abstract class MsgResp {
     protected String type;
     protected List<Msg> messageChain;
     protected Sender sender;
 
-//    public MsgResp() {
-//        this.type = getType();
-//    }
-//
-//    public abstract String getType();
+    public MsgResp() {
+        this.type = getType();
+    }
+
+    public abstract String getType();
 }

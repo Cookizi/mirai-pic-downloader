@@ -9,7 +9,7 @@ import top.cookizi.bot.common.enums.MsgChainType;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PlainTextMsg extends Msg{
+public class PlainTextMsg extends Msg {
     String text;
 
     public PlainTextMsg(String text) {
@@ -18,6 +18,6 @@ public class PlainTextMsg extends Msg{
 
     @Override
     public String getType() {
-        return MsgChainType.PLAIN.type;
+        return MsgChainType.PLAIN.getType();
     }
 }

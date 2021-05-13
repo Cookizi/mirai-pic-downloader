@@ -16,7 +16,7 @@ public class MsgAdapter extends BaseJsonDeserializerAdapter<Msg> {
     public Msg deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         String type = json.getAsJsonObject().get("type").getAsString();
         MsgChainType msgChainType = MsgChainType.valueOf(type.toUpperCase(Locale.ROOT));
-        return gson.fromJson(json, msgChainType.clazz);
+        return gson.fromJson(json, msgChainType.getClazz());
     }
 
     @Override

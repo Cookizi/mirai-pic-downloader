@@ -22,6 +22,6 @@ public class ImgMsg extends Msg {
 
     @Override
     public String getType() {
-        return MsgChainType.IMAGE.type;
+        return MsgChainType.IMAGE.getType();
     }
 }

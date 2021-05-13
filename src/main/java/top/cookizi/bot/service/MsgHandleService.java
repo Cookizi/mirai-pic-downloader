@@ -1,5 +1,6 @@
 package top.cookizi.bot.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import top.cookizi.bot.common.enums.MsgType;
 import top.cookizi.bot.modle.resp.MsgResp;
@@ -10,6 +11,7 @@ import top.cookizi.bot.modle.resp.MsgResp;
  * @description
  */
 @Service
+@Slf4j
 public class MsgHandleService {
 
     /**
@@ -24,9 +26,12 @@ public class MsgHandleService {
         switch (msgType) {
             case GROUP_MESSAGE:
                 groupMessageHandle(msgResp, sessionKey);
+                break;
             case FRIEND_MESSAGE:
                 friendMessageHandle(msgResp, sessionKey);
+                break;
             default:
+                log.error("不存在消息类型:{},sessionKey:{}", msgResp.getType(), sessionKey);
         }
     }
 

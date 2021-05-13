@@ -1,0 +1,23 @@
+bot:
+  apiUrl: http://localhost:8080/
+  wsUrl: ws://localhost:8080/message?sessionKey=
+  savePath: /media/cookizi/null/qqBotSavedFile/image/
+  forwardGroups:
+  #tw
+  driver:
+    #    path: geckodriver.exe
+    #    proxy: http://127.0.0.1:10810/pack/?t=233736
+    #    proxy: 127.0.0.1:10809
+    #浏览器类型：firefox,chrome
+    type: chrome
+    timeout: 5
+    profile:
+
+task:
+  executor:
+    core-pool-size: 80
+    max-pool-size: 200
+    thread-name-prefix: taskExecutor-
+  scheduler:
+    pool-size: 80
+    thread-name-prefix: taskScheduler-
