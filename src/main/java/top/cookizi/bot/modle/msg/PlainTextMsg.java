@@ -18,6 +18,6 @@ public class PlainTextMsg extends Msg {
 
     @Override
     public String getType() {
-        return MsgChainType.PLAIN.getType();
+        return MsgChainType.PLAIN.type;
     }
 }

@@ -14,7 +14,7 @@ public class MsgTypeAdapter extends BaseJsonDeserializerAdapter<MsgResp> {
     public MsgResp deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         String type = json.getAsJsonObject().get("type").getAsString();
         MsgType msgType = MsgType.parse(type);
-        return gson.fromJson(json, msgType.getClazz());
+        return gson.fromJson(json, msgType.clazz);
     }
 
     @Override

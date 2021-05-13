@@ -3,7 +3,7 @@ package top.cookizi.bot;
 import com.google.gson.Gson;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import top.cookizi.bot.common.utils.ImagePHash;
+import top.cookizi.bot.common.utils.image.ImagePHash;
 
 import java.io.*;
 import java.util.ArrayList;

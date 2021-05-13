@@ -1,4 +1,4 @@
-package top.cookizi.bot.common.utils;
+package top.cookizi.bot.common.utils.image;
 
 import lombok.extern.slf4j.Slf4j;
 

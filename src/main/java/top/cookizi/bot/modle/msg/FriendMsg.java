@@ -16,6 +16,6 @@ public class FriendMsg extends MsgResp {
 
     @Override
     public String getType() {
-        return MsgType.FRIEND_MESSAGE.getType();
+        return MsgType.FRIEND_MESSAGE.type;
     }
 }

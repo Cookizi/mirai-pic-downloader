@@ -1,13 +1,11 @@
 package top.cookizi.bot.common.enums;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import top.cookizi.bot.common.utils.StringUtils;
 import top.cookizi.bot.modle.msg.FriendMsg;
 import top.cookizi.bot.modle.msg.GroupMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
 
-@Getter
 @AllArgsConstructor
 public enum MsgType {
 
@@ -20,9 +18,9 @@ public enum MsgType {
     FRIEND_MESSAGE("FriendMessage", FriendMsg.class),
     ;
 
-    private final String type;
+    public final String type;
 
-    private final Class<? extends MsgResp> clazz;
+    public final Class<? extends MsgResp> clazz;
 
     public static MsgType parse(String type) {
         if (StringUtils.isBlank(type)) {

@@ -12,6 +12,6 @@ public class SourceMsg extends Msg {
 
     @Override
     public String getType() {
-        return MsgChainType.SOURCE.getType();
+        return MsgChainType.SOURCE.type;
     }
 }

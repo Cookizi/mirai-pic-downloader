@@ -9,7 +9,6 @@ import top.cookizi.bot.modle.msg.PlainTextMsg;
 import top.cookizi.bot.modle.msg.SourceMsg;
 
 @AllArgsConstructor
-@Getter
 public enum MsgChainType {
     /**
      * 默认异常
@@ -20,8 +19,8 @@ public enum MsgChainType {
     PLAIN("Plain", PlainTextMsg.class),
     SOURCE("Source", SourceMsg.class),
     ;
-    private final String type;
-    private final Class<? extends Msg> clazz;
+    public final String type;
+    public final Class<? extends Msg> clazz;
 
     public static MsgChainType parse(String type) {
         if (StringUtils.isBlank(type)) {

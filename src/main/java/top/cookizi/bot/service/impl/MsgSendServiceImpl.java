@@ -37,6 +37,14 @@ public class MsgSendServiceImpl implements MsgSendService {
         System.out.println(JSON.toJSONString(res));
     }
 
+    /**
+     * 消息唯一出口方便监控
+     *
+     * @param target
+     * @param msgList
+     * @param msgType
+     * @return
+     */
     private Map<String, String> sendMsg(Long target, List<Msg> msgList, MsgType msgType) {
         Map<String, String> res = null;
         switch (msgType) {

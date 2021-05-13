@@ -53,6 +53,7 @@ dependencyManagement {
 //tasks.withType(JavaCompile) {
 //    options.encoding = "GBK"
 //}
+
 dependencies {
 //    implementation 'net.mamoe:mirai-slf4j-bridge:1.1.0' // 替换为最新版本
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
@@ -85,8 +86,6 @@ dependencies {
     implementation("commons-cli:commons-cli:1.4")
     implementation("com.google.code.gson:gson:2.8.6")
     compileOnly("org.fusesource.jansi:jansi:2.3.2")
-
-
 }
 
 // 将依赖包复制到lib目录

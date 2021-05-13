@@ -17,7 +17,7 @@ public class FriendImgDownloadService extends AbstractDownloadService {
 
     @Override
     public List<Msg> handleMsg(MsgResp msg) {
-        return msg.getMessageChain().stream().filter(x -> MsgChainType.IMAGE.getType().equals(x.getType()))
+        return msg.getMessageChain().stream().filter(x -> MsgChainType.IMAGE.type.equals(x.getType()))
                 .map(x -> (ImgMsg) x).collect(Collectors.toList());
     }
 
@@ -34,7 +34,7 @@ public class FriendImgDownloadService extends AbstractDownloadService {
 
     @Override
     public boolean isTypeMatch(MsgResp msg) {
-        return msg.getMessageChain().stream().anyMatch(x -> MsgChainType.IMAGE.getType().equals(x.getType()));
+        return msg.getMessageChain().stream().anyMatch(x -> MsgChainType.IMAGE.type.equals(x.getType()));
     }
 
 

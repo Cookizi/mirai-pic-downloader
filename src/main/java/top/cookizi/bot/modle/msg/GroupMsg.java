@@ -16,6 +16,6 @@ public class GroupMsg extends MsgResp {
 
     @Override
     public String getType() {
-        return MsgType.GROUP_MESSAGE.getType();
+        return MsgType.GROUP_MESSAGE.type;
     }
 }
