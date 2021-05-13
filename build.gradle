@@ -9,12 +9,12 @@ plugins {
 }
 ext {
     miraiVersion = "2.5.1"
-    gradleKotlinPluginVersion="1.4.30-RC"
+    gradleKotlinPluginVersion = "1.4.30-RC"
     set('springCloudVersion', "2020.0.2")
 }
 
 
-jar{
+jar {
     baseName("pic-downloader")
     version("1.0")
 }
@@ -57,8 +57,14 @@ dependencyManagement {
 dependencies {
 //    implementation 'net.mamoe:mirai-slf4j-bridge:1.1.0' // 替换为最新版本
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
-    compile 'org.springframework.boot:spring-boot-starter-actuator'
-    compile 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly group: 'org.apache.poi', name: 'poi-ooxml', version: '3.14'
+    compileOnly group: 'com.google.guava', name: 'guava', version: '18.0'
+    compileOnly group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.13'
+    compileOnly group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.12'
+    compileOnly group: 'com.alibaba', name: 'fastjson', version: '1.2.41'
+
+//    compile 'org.springframework.boot:spring-boot-starter-actuator'
+//    compile 'org.springframework.boot:spring-boot-starter-web'
 
     implementation group: 'io.github.openfeign', name: 'feign-core', version: '11.1'
     implementation group: 'io.github.openfeign', name: 'feign-okhttp', version: '11.1'
@@ -67,11 +73,10 @@ dependencies {
 
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
-   // implementation group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.49.0'
+//    implementation group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.49.0'
 
 //    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
-  //  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
-
+//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 
 
     implementation 'org.springframework.boot:spring-boot-starter'
@@ -82,7 +87,7 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     annotationProcessor 'org.projectlombok:lombok:1.18.18'
 
- //   implementation group: 'org.mozilla', name: 'rhino', version: '1.7.13'
+//    implementation group: 'org.mozilla', name: 'rhino', version: '1.7.13'
     implementation("commons-cli:commons-cli:1.4")
     implementation("com.google.code.gson:gson:2.8.6")
     compileOnly("org.fusesource.jansi:jansi:2.3.2")

@@ -45,7 +45,7 @@ public class CommonSchedule {
                 ;
             default:
         }
-        sendService.sendToGroup(618701394, msg);
+        sendService.sendTextToGroup(618701394, msg);
 
     }
 }

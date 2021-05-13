@@ -1,19 +1,15 @@
 package top.cookizi.bot.common.enums;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import top.cookizi.bot.common.utils.StringUtils;
-import top.cookizi.bot.modle.msg.ImgMsg;
-import top.cookizi.bot.modle.msg.Msg;
-import top.cookizi.bot.modle.msg.PlainTextMsg;
-import top.cookizi.bot.modle.msg.SourceMsg;
+import top.cookizi.bot.modle.msg.*;
 
 @AllArgsConstructor
 public enum MsgChainType {
     /**
      * 默认异常
      */
-    NON("null", null),
+    NON("null", UnknownMsg.class),
 
     IMAGE("Image", ImgMsg.class),
     PLAIN("Plain", PlainTextMsg.class),

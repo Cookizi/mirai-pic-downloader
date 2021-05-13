@@ -1,4 +1,4 @@
-package top.cookizi.bot.service.beforeDownload;
+package top.cookizi.bot.service.download.beforeDownload;
 
 public abstract class AbstractBeforeDownloadService {
 

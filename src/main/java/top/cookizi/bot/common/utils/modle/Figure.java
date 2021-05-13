@@ -1,6 +1,6 @@
 package top.cookizi.bot.common.utils.modle;
 
-import top.cookizi.bot.common.utils.MathUtils;
+import top.cookizi.bot.common.utils.StringMathUtils;
 
 /**
  * @Author: WangHeQi
@@ -31,41 +31,41 @@ public class Figure {
     /*** 加在自己身上 ***/
 
     public Figure Plus(Figure b) {
-        this.copy(MathUtils.plus(this, b));
+        this.copy(StringMathUtils.plus(this, b));
         return this;
     }
 
     public Figure Minus(Figure b) {
-        this.copy(MathUtils.minus(this, b));
+        this.copy(StringMathUtils.minus(this, b));
         return this;
     }
 
     public Figure Times(Figure b) {
-        this.copy(MathUtils.times(this, b));
+        this.copy(StringMathUtils.times(this, b));
         return this;
     }
 
     public Figure Divide(Figure b) {
-        this.copy(MathUtils.divide(this, b));
+        this.copy(StringMathUtils.divide(this, b));
         return this;
     }
 
     /*** 仅返回结果不加在自己身上 ***/
 
     public Figure plus(Figure b) {
-        return MathUtils.plus(this, b);
+        return StringMathUtils.plus(this, b);
     }
 
     public Figure minus(Figure b) {
-        return MathUtils.minus(this, b);
+        return StringMathUtils.minus(this, b);
     }
 
     public Figure times(Figure b) {
-        return MathUtils.times(this, b);
+        return StringMathUtils.times(this, b);
     }
 
     public Figure divide(Figure b) {
-        return MathUtils.divide(this, b);
+        return StringMathUtils.divide(this, b);
     }
 
     /**

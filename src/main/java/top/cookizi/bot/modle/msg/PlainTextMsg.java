@@ -13,6 +13,7 @@ public class PlainTextMsg extends Msg {
     String text;
 
     public PlainTextMsg(String text) {
+        super();
         this.text = text;
     }
 

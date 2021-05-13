@@ -17,7 +17,15 @@ public class ImgMsg extends Msg {
 
 
     public ImgMsg(String url) {
+        super();
         this.url = url;
+    }
+
+    public ImgMsg(String url, String imageId, String path) {
+        super();
+        this.url = url;
+        this.imageId = imageId;
+        this.path = path;
     }
 
     @Override

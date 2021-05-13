@@ -1,4 +1,4 @@
-package top.cookizi.bot.modle.resp;
+package top.cookizi.bot.modle.domain;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -10,4 +10,5 @@ public class Sender {
     long id;
     String nickname;
     String remark;
+    Group group;
 }

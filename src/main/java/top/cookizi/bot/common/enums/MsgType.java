@@ -2,8 +2,8 @@ package top.cookizi.bot.common.enums;
 
 import lombok.AllArgsConstructor;
 import top.cookizi.bot.common.utils.StringUtils;
-import top.cookizi.bot.modle.msg.FriendMsg;
-import top.cookizi.bot.modle.msg.GroupMsg;
+import top.cookizi.bot.modle.resp.FriendMsg;
+import top.cookizi.bot.modle.resp.GroupMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
 
 @AllArgsConstructor
@@ -12,7 +12,7 @@ public enum MsgType {
     /**
      * 默认异常
      */
-    NON("null", null),
+    NON("null", MsgResp.class),
 
     GROUP_MESSAGE("GroupMessage", GroupMsg.class),
     FRIEND_MESSAGE("FriendMessage", FriendMsg.class),

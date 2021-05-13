@@ -12,7 +12,7 @@ import top.cookizi.bot.common.enums.RespType;
 import top.cookizi.bot.modle.msg.Msg;
 import top.cookizi.bot.modle.msg.PlainTextMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
-import top.cookizi.bot.service.afterDownload.AbstractAfterDownloadService;
+import top.cookizi.bot.service.download.afterDownload.AbstractAfterDownloadService;
 import top.cookizi.bot.manage.mirai.MiraiApiClient;
 
 import java.io.BufferedOutputStream;

@@ -1,4 +1,4 @@
-package top.cookizi.bot.service.afterDownload;
+package top.cookizi.bot.service.download.afterDownload;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

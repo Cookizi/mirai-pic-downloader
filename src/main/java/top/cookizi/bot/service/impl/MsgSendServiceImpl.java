@@ -4,15 +4,13 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import top.cookizi.bot.common.constant.CommonConst;
 import top.cookizi.bot.common.enums.MsgType;
 import top.cookizi.bot.manage.mirai.MiraiApiClient;
-import top.cookizi.bot.modle.msg.Msg;
-import top.cookizi.bot.modle.msg.PlainTextMsg;
+import top.cookizi.bot.modle.domain.SendMsg;
 import top.cookizi.bot.service.MsgSendService;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,35 +26,61 @@ public class MsgSendServiceImpl implements MsgSendService {
     private MiraiApiClient apiClient;
 
     @Override
-    public void sendToGroup(long id, String text) {
-        List<Msg> msgList = new ArrayList<>();
-        PlainTextMsg textMsg = new PlainTextMsg();
-        textMsg.setText(text);
-        msgList.add(textMsg);
-        Map<String, String> res = sendMsg(id, msgList, MsgType.GROUP_MESSAGE);
-        System.out.println(JSON.toJSONString(res));
+    public boolean sendTextToGroup(long id, String text) {
+        return sendToGroup(SendMsg.builder()
+                .target(id)
+                .text(text)
+                .build());
+    }
+
+    @Override
+    public boolean sendTextToFriend(long id, String text) {
+        return sendToFriend(SendMsg.builder()
+                .target(id)
+                .text(text)
+                .build());
+    }
+
+    @Override
+    public boolean sendToGroup(SendMsg sendMsg) {
+        Map<String, String> res = sendMsg(sendMsg, MsgType.GROUP_MESSAGE);
+        log.info("send msg to group res :{}", JSON.toJSONString(res));
+        return checkSendRes(res);
+    }
+
+    @Override
+    public boolean sendToFriend(SendMsg sendMsg) {
+        Map<String, String> res = sendMsg(sendMsg, MsgType.FRIEND_MESSAGE);
+        log.info("send msg to friend res :{}", JSON.toJSONString(res));
+        return checkSendRes(res);
     }
 
     /**
      * 消息唯一出口方便监控
      *
-     * @param target
-     * @param msgList
+     * @param sendMsg
      * @param msgType
      * @return
      */
-    private Map<String, String> sendMsg(Long target, List<Msg> msgList, MsgType msgType) {
+    private Map<String, String> sendMsg(SendMsg sendMsg, MsgType msgType) {
         Map<String, String> res = null;
         switch (msgType) {
             case FRIEND_MESSAGE:
-                res = apiClient.sendFriendMessage(CommonConst.getSession(), target, msgList);
+                res = apiClient.sendFriendMessage(CommonConst.getSession(), sendMsg.getTarget(), sendMsg.getMsgList());
                 break;
             case GROUP_MESSAGE:
-                res = apiClient.sendGroupMessage(CommonConst.getSession(), target, msgList);
+                res = apiClient.sendGroupMessage(CommonConst.getSession(), sendMsg.getTarget(), sendMsg.getMsgList());
                 break;
             default:
-                log.warn("不存在消息类型,target:{},msgList:{}", target, JSON.toJSON(msgList));
+                log.warn("不存在消息类型,msgType:{},sendMsg:{}", msgType, JSON.toJSON(sendMsg));
         }
         return res;
+    }
+
+    private boolean checkSendRes(Map<String, String> res) {
+        if (CollectionUtils.isEmpty(res)) {
+            return false;
+        }
+        return "0".equals(res.get("code"));
     }
 }

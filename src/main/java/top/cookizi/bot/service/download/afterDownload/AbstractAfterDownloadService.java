@@ -1,4 +1,4 @@
-package top.cookizi.bot.service.afterDownload;
+package top.cookizi.bot.service.download.afterDownload;
 
 import java.util.List;
 

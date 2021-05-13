@@ -11,7 +11,7 @@ server:
 #bot设置
 bot:
   qq: 2044827989
-  authKey: INITKEYt4W1x7j1
+  authKey: INITKEYqY2ovydT
   #不启动浏览器界面
   driver:
     headless: false

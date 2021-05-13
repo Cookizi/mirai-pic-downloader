@@ -1,4 +1,4 @@
-package top.cookizi.bot.modle.msg;
+package top.cookizi.bot.modle.resp;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -8,8 +8,6 @@ import lombok.experimental.FieldDefaults;
 import top.cookizi.bot.common.enums.MsgType;
 import top.cookizi.bot.modle.resp.MsgResp;
 
-@Data
-@Builder
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GroupMsg extends MsgResp {
