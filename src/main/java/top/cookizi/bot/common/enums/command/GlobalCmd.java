@@ -26,4 +26,13 @@ public enum GlobalCmd implements ICommand {
     public void init() {
         MemoryConst.addCommand(command, run);
     }
+
+    public static GlobalCmd parse(String command) {
+        for (GlobalCmd globalCmd : GlobalCmd.values()) {
+            if (globalCmd.command.equals(command)) {
+                return globalCmd;
+            }
+        }
+        return null;
+    }
 }

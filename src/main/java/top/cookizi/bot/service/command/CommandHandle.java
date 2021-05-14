@@ -55,6 +55,15 @@ public class CommandHandle {
             e.printStackTrace();
         }
 
+        if (cmdRes.isBeanCmd()) {
+            switch (commands[0]) {
+                case "session":
+                    apiService.resetSession();
+                    break;
+                default:
+            }
+        }
+
         if (cmdRes.isSendMsg()) {
             SendMsg sendMsg = cmdRes.getMsgBody();
             switch (MsgType.parse(msgResp.getType())) {
