@@ -3,13 +3,16 @@ package top.cookizi.bot.service.command;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.cookizi.bot.common.utils.StringMathUtils;
+import top.cookizi.bot.common.constant.MemoryConst;
+import top.cookizi.bot.common.enums.MsgType;
 import top.cookizi.bot.common.utils.StringUtils;
+import top.cookizi.bot.modle.domain.CmdRes;
+import top.cookizi.bot.modle.domain.SendMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
 import top.cookizi.bot.service.MiraiApiService;
 import top.cookizi.bot.service.MsgSendService;
 
-import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author heq
@@ -38,27 +41,35 @@ public class CommandHandle {
         if (commands.length == 0) {
             return;
         }
-        switch (commands[0]) {
-            case "random":
-                msgSendService.sendTextToGroup(msgResp.getSender().getGroup().getId(), "随机数：" + String.valueOf((int) (Math.random() * 100)));
-                break;
-            case "计算":
-                String res = "结果：";
-                try {
-                    List<String> postFix = StringMathUtils.infixToPostfix(commands[1]);
-                    res = res + StringMathUtils.calculate(postFix);
-                } catch (RuntimeException e) {
-                    res = e.getMessage();
-                }
-                msgSendService.sendTextToGroup(msgResp.getSender().getGroup().getId(), res);
-                break;
-            case "session":
-                apiService.resetSession();
-                break;
-            default:
-                log.warn("command not found");
+
+        CmdRes cmdRes;
+        try {
+            Function<String[], ? extends CmdRes> run = MemoryConst.getCommand(commands[0]);
+            if (run == null) {
+                return;
+            }
+            cmdRes = run.apply(commands);
+        } catch (Exception e) {
+            cmdRes = CmdRes.builder().sendMsg(true)
+                    .msgBody(SendMsg.TextMsg("指令异常" + e.getMessage())).build();
+            e.printStackTrace();
         }
 
+        if (cmdRes.isSendMsg()) {
+            SendMsg sendMsg = cmdRes.getMsgBody();
+            switch (MsgType.parse(msgResp.getType())) {
+                case GROUP_MESSAGE:
+                    sendMsg.setTarget(msgResp.getSender().getGroup().getId());
+                    msgSendService.sendToGroup(sendMsg);
+                    break;
+                case FRIEND_MESSAGE:
+                    sendMsg.setTarget(msgResp.getSender().getId());
+                    msgSendService.sendToFriend(sendMsg);
+                    break;
+                default:
+                    log.warn("non msg type");
+            }
+        }
     }
 
 }

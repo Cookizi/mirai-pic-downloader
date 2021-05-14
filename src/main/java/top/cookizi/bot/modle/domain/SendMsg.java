@@ -27,6 +27,10 @@ public class SendMsg {
         return new SendMsgBuilder();
     }
 
+    public static SendMsg TextMsg(String text) {
+        return SendMsg.builder().text(text).build();
+    }
+
     public static class SendMsgBuilder {
 
         private final SendMsg sendMsg;

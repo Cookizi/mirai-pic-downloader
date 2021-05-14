@@ -10,7 +10,6 @@ import top.cookizi.bot.modle.msg.PlainTextMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
 import top.cookizi.bot.service.command.CommandHandle;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

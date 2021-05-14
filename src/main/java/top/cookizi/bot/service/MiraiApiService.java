@@ -4,7 +4,7 @@ package top.cookizi.bot.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.cookizi.bot.common.constant.CommonConst;
+import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.modle.resp.AuthResp;
 import top.cookizi.bot.manage.mirai.MiraiApiClient;
@@ -32,11 +32,11 @@ public class MiraiApiService {
     }
 
     public void resetSession() {
-        log.info("update session old session:{}", CommonConst.getSession());
-        miraiApiClient.release(CommonConst.getSession(), appConfig.getQq());
+        log.info("update session old session:{}", MemoryConst.getSession());
+        miraiApiClient.release(MemoryConst.getSession(), appConfig.getQq());
         AuthResp auth = miraiApiClient.auth(appConfig.getAuthKey());
         miraiApiClient.verify(auth.getSession(), appConfig.getQq());
-        CommonConst.setSession(auth.getSession());
-        log.info("update session new session:{}", CommonConst.getSession());
+        MemoryConst.setSession(auth.getSession());
+        log.info("update session new session:{}", MemoryConst.getSession());
     }
 }

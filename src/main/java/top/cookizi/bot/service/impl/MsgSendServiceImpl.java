@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import top.cookizi.bot.common.constant.CommonConst;
+import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.common.enums.MsgType;
 import top.cookizi.bot.manage.mirai.MiraiApiClient;
 import top.cookizi.bot.modle.domain.SendMsg;
@@ -66,10 +66,10 @@ public class MsgSendServiceImpl implements MsgSendService {
         Map<String, String> res = null;
         switch (msgType) {
             case FRIEND_MESSAGE:
-                res = apiClient.sendFriendMessage(CommonConst.getSession(), sendMsg.getTarget(), sendMsg.getMsgList());
+                res = apiClient.sendFriendMessage(MemoryConst.getSession(), sendMsg.getTarget(), sendMsg.getMsgList());
                 break;
             case GROUP_MESSAGE:
-                res = apiClient.sendGroupMessage(CommonConst.getSession(), sendMsg.getTarget(), sendMsg.getMsgList());
+                res = apiClient.sendGroupMessage(MemoryConst.getSession(), sendMsg.getTarget(), sendMsg.getMsgList());
                 break;
             default:
                 log.warn("不存在消息类型,msgType:{},sendMsg:{}", msgType, JSON.toJSON(sendMsg));
