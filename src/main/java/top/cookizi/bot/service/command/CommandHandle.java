@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.common.enums.MsgType;
+import top.cookizi.bot.common.enums.command.ICommand;
 import top.cookizi.bot.common.utils.StringUtils;
 import top.cookizi.bot.modle.domain.CmdRes;
 import top.cookizi.bot.modle.domain.SendMsg;
@@ -44,11 +45,11 @@ public class CommandHandle {
 
         CmdRes cmdRes;
         try {
-            Function<String[], ? extends CmdRes> run = MemoryConst.getCommand(commands[0]);
-            if (run == null) {
+            ICommand iCommand = MemoryConst.getCommand(commands[0]);
+            if (iCommand == null) {
                 return;
             }
-            cmdRes = run.apply(commands);
+            cmdRes = iCommand.getRun().apply(commands);
         } catch (Exception e) {
             cmdRes = CmdRes.builder().sendMsg(true)
                     .msgBody(SendMsg.TextMsg("指令异常" + e.getMessage())).build();

@@ -25,7 +25,7 @@ public class MemoryConst {
     /**
      * 全部指令
      */
-    private static final Map<String, Function<String[], ? extends CmdRes>> COMMAND_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, ICommand> COMMAND_MAP = new ConcurrentHashMap<>();
 
     static {
         for (Command command : Command.values()) {
@@ -49,11 +49,11 @@ public class MemoryConst {
         MemoryConst.GLOBAL_SESSION = globalSession;
     }
 
-    public static void addCommand(String command, Function<String[], ? extends CmdRes> function) {
-        COMMAND_MAP.put(command, function);
+    public static void addCommand(String command, ICommand iCommand) {
+        COMMAND_MAP.put(command, iCommand);
     }
 
-    public static Function<String[], ? extends CmdRes> getCommand(String command) {
+    public static ICommand getCommand(String command) {
         return COMMAND_MAP.get(command);
     }
 

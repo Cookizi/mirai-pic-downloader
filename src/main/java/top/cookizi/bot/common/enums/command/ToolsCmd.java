@@ -1,7 +1,5 @@
 package top.cookizi.bot.common.enums.command;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.common.utils.StringMathUtils;
 import top.cookizi.bot.modle.domain.CmdRes;
@@ -15,7 +13,6 @@ import java.util.function.Function;
  * @date 2021/5/14 3:45 下午
  * @description
  */
-@AllArgsConstructor
 public enum ToolsCmd implements ICommand {
 
     CALCULATE("计算", (commands) -> {
@@ -37,13 +34,23 @@ public enum ToolsCmd implements ICommand {
 
     public String command;
 
+    public Command commandType;
+
     public Function<String[], ? extends CmdRes> run;
 
-    ToolsCmd() {
+    ToolsCmd(String command, Function<String[], ? extends CmdRes> run) {
+        this.command = command;
+        this.commandType = Command.TOOLS_CMD;
+        this.run = run;
     }
 
     @Override
     public void init() {
-        MemoryConst.addCommand(command, run);
+        MemoryConst.addCommand(command, this);
+    }
+
+    @Override
+    public Function<String[], ? extends CmdRes> getRun() {
+        return run;
     }
 }

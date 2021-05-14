@@ -1,6 +1,5 @@
 package top.cookizi.bot.common.enums.command;
 
-import lombok.AllArgsConstructor;
 import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.modle.domain.CmdRes;
 
@@ -11,7 +10,6 @@ import java.util.function.Function;
  * @date 2021/5/14 3:13 下午
  * @description
  */
-@AllArgsConstructor
 public enum GlobalCmd implements ICommand {
 
     SESSION_RESET("session", (commands) -> {
@@ -20,11 +18,24 @@ public enum GlobalCmd implements ICommand {
 
     public String command;
 
+    public Command commandType;
+
     public Function<String[], ? extends CmdRes> run;
+
+    GlobalCmd(String command, Function<String[], ? extends CmdRes> run) {
+        this.command = command;
+        this.commandType = Command.GLOBAL_CMD;
+        this.run = run;
+    }
 
     @Override
     public void init() {
-        MemoryConst.addCommand(command, run);
+        MemoryConst.addCommand(command, this);
+    }
+
+    @Override
+    public Function<String[], ? extends CmdRes> getRun() {
+        return run;
     }
 
     public static GlobalCmd parse(String command) {
