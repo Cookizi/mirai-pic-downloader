@@ -26,7 +26,7 @@ public enum ToolsCmd implements ICommand {
     }),
 
     RANDOM("random", (commands) -> {
-        double random = commands.length > 2 ? (Integer.parseInt(commands[2]) * Math.random()) : (100 * Math.random());
+        double random = commands.length > 1 ? (Integer.parseInt(commands[1]) * Math.random()) : (100 * Math.random());
         String res = String.valueOf(((int) (random * 100)) / 100.0);
         return CmdRes.builder().sendMsg(true)
                 .msgBody(SendMsg.TextMsg(res)).build();
