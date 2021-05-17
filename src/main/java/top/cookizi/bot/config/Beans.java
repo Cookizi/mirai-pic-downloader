@@ -9,7 +9,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import top.cookizi.bot.config.gsonAdapter.BaseJsonDeserializerAdapter;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -26,22 +30,29 @@ public class Beans {
                 .retryOnConnectionFailure(true)
                 .connectionPool(new ConnectionPool())
                 .connectTimeout(60, TimeUnit.SECONDS)
+                .callTimeout(60,TimeUnit.SECONDS)
                 .build();
     }
- /*   @Bean("proxyClient")
+    @Bean("proxyClient")
     public OkHttpClient proxyClient() {
         return new OkHttpClient.Builder()
                 .retryOnConnectionFailure(true)
                 .connectionPool(new ConnectionPool())
-                .connectTimeout(60, TimeUnit.SECONDS)
+                .callTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60,TimeUnit.SECONDS)
                 .proxy(new Proxy(Proxy.Type.HTTP,new InetSocketAddress(appConfig.getProxyHost(),appConfig.getProxyPort())))
                 .build();
-    }*/
+    }
 
     @Bean(name = "goodGson")
     public Gson GoodGson() {
         GsonBuilder builder = new GsonBuilder();
         adapterList.forEach(x -> builder.registerTypeAdapter(x.getClazz(), x));
         return builder.create();
+    }
+
+    @Bean
+    public ThreadPoolExecutor threadPool(){
+        return new ThreadPoolExecutor(1, 10, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
     }
 }

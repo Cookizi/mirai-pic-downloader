@@ -1,8 +1,13 @@
 bot:
-  apiUrl: http://localhost:8080/
-  wsUrl: ws://localhost:8080/message?sessionKey=
-  savePath: /Users/heq/IdeaProjects/mirai-pic-downloader/src/main/resources/image
-  forwardGroups:
+  apiUrl: http://192.168.50.30:8080/
+  wsUrl: ws://192.168.50.30:8080/message?sessionKey=
+  savePath: D:\
+#  savePath: Z:\qqBotSavedFile\image
+  forwardGroups: 1142341316
+  proxy-host: 192.168.50.30
+  proxy-port: 10809
+  mirai-http-api-path:
+  proxy: false
   #tw
   driver:
 #    path: geckodriver.exe

@@ -10,11 +10,12 @@ server:
 
 #bot设置
 bot:
-  qq: 2044827989
-  authKey: 12345678
+  qq: 1600699908
+  authKey: miraiAuthKey
   #不启动浏览器界面
   driver:
     headless: false
+  proxy-url: http://127.0.0.1:10809
 
 #log设置
 logging:

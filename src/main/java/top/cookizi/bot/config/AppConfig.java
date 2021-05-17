@@ -25,7 +25,12 @@ public class AppConfig {
     String apiUrl;
     String savePath;
     String forwardGroups;
-    String proxyUrl;
+    String cmdPrefix = "/";
+    boolean proxy;
+    String proxyHost;
+    int proxyPort;
+    String miraiHttpApiPath;
+    int setuRate = 25;
 
     public List<Long> getForwardGroups() {
         if (StringUtils.isBlank(forwardGroups)) {
@@ -41,14 +46,6 @@ public class AppConfig {
                 }).filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-    }
-
-    public String getProxyHost() {
-        return this.proxyUrl.split("//|:")[2];
-    }
-
-    public int getProxyPort() {
-        return Integer.parseInt(this.proxyUrl.split(":")[2]);
     }
 
 }

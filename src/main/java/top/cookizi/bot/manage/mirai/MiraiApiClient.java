@@ -36,8 +36,8 @@ public interface MiraiApiClient {
 
     @RequestLine("POST sendGroupMessage")
     Map<String, String> sendGroupMessage(@Param("sessionKey") String sessionKey,
-                                          @Param("target") Long targetGroup,
-                                          @Param("messageChain") List<Msg> messageChain);
+                                         @Param("target") Long targetGroup,
+                                         @Param("messageChain") List<Msg> messageChain);
 
     @RequestLine("POST config")
     void updateSessionConfig(@Param("sessionKey") String session,

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import top.cookizi.bot.cache.CommonCache;
 import top.cookizi.bot.config.AppConfig;
+import top.cookizi.bot.dispatcher.MiraiCmdDispatcher;
 import top.cookizi.bot.modle.resp.MsgResp;
 import top.cookizi.bot.service.MsgHandleService;
 import top.cookizi.bot.service.MiraiApiService;
@@ -28,6 +29,8 @@ public class MiraiWebSocketListener extends WebSocketListener {
     private MiraiApiService miraiApiService;
     @Autowired
     private MsgHandleService msgHandleService;
+    @Autowired
+    private MiraiCmdDispatcher miraiCmdDispatcher;
 
 
     @Autowired
@@ -73,9 +76,10 @@ public class MiraiWebSocketListener extends WebSocketListener {
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
         log.info("收到原始消息：{}", text);
-        String sessionKey = webSocket.request().url().queryParameter("sessionKey");
         MsgResp msgResp = goodGson.fromJson(text, MsgResp.class);
-        msgHandleService.messageHandle(msgResp, sessionKey);
+//        msgHandleService.messageHandle(msgResp, sessionKey);
+        miraiCmdDispatcher.doDispatcher(msgResp);
+        log.info("消息处理完成");
     }
 
     @Override
