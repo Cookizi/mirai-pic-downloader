@@ -63,6 +63,9 @@ dependencies {
     compileOnly group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.12'
     compileOnly group: 'com.alibaba', name: 'fastjson', version: '1.2.41'
 
+    implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+
+
 //    compile 'org.springframework.boot:spring-boot-starter-actuator'
 //    compile 'org.springframework.boot:spring-boot-starter-web'
 
