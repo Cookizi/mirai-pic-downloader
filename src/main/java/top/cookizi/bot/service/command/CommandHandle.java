@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.cookizi.bot.common.constant.MemoryConst;
+import top.cookizi.bot.cache.CommandCache;
 import top.cookizi.bot.common.enums.MsgType;
 import top.cookizi.bot.common.enums.command.ICommand;
 import top.cookizi.bot.common.utils.StringUtils;
@@ -13,8 +13,6 @@ import top.cookizi.bot.modle.domain.SendMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
 import top.cookizi.bot.service.MiraiApiService;
 import top.cookizi.bot.service.MsgSendService;
-
-import java.util.function.Function;
 
 /**
  * @author heq
@@ -46,7 +44,7 @@ public class CommandHandle {
 
         CmdRes cmdRes;
         try {
-            ICommand iCommand = MemoryConst.getCommand(commands[0]);
+            ICommand iCommand = CommandCache.getCommand(commands[0]);
             if (iCommand == null) {
                 return;
             }

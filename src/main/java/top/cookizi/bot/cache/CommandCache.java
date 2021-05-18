@@ -1,13 +1,10 @@
-package top.cookizi.bot.common.constant;
+package top.cookizi.bot.cache;
 
 import lombok.extern.slf4j.Slf4j;
-import top.cookizi.bot.common.enums.command.Command;
 import top.cookizi.bot.common.enums.command.ICommand;
-import top.cookizi.bot.modle.domain.CmdRes;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 /**
  * @author heq
@@ -15,12 +12,7 @@ import java.util.function.Function;
  * @description
  */
 @Slf4j
-public class MemoryConst {
-
-    /**
-     * 全局token
-     */
-    private static String GLOBAL_SESSION;
+public class CommandCache {
 
     /**
      * 全部指令
@@ -28,7 +20,7 @@ public class MemoryConst {
     private static final Map<String, ICommand> COMMAND_MAP = new ConcurrentHashMap<>();
 
     static {
-        for (Command command : Command.values()) {
+        for (top.cookizi.bot.common.enums.command.Command command : top.cookizi.bot.common.enums.command.Command.values()) {
             try {
                 ICommand[] iCommands = command.clazz.getEnumConstants();
                 for (ICommand iCommand : iCommands) {
@@ -39,14 +31,6 @@ public class MemoryConst {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static String getSession() {
-        return GLOBAL_SESSION;
-    }
-
-    public static void setSession(String globalSession) {
-        MemoryConst.GLOBAL_SESSION = globalSession;
     }
 
     public static void addCommand(String command, ICommand iCommand) {

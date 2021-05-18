@@ -1,6 +1,6 @@
 package top.cookizi.bot.common.enums.command;
 
-import top.cookizi.bot.common.constant.MemoryConst;
+import top.cookizi.bot.cache.CommandCache;
 import top.cookizi.bot.common.utils.StringMathUtils;
 import top.cookizi.bot.modle.domain.CmdRes;
 import top.cookizi.bot.modle.domain.SendMsg;
@@ -34,19 +34,19 @@ public enum ToolsCmd implements ICommand {
 
     public String command;
 
-    public Command commandType;
+    public top.cookizi.bot.common.enums.command.Command commandType;
 
     public Function<String[], ? extends CmdRes> run;
 
     ToolsCmd(String command, Function<String[], ? extends CmdRes> run) {
         this.command = command;
-        this.commandType = Command.TOOLS_CMD;
+        this.commandType = top.cookizi.bot.common.enums.command.Command.TOOLS_CMD;
         this.run = run;
     }
 
     @Override
     public void init() {
-        MemoryConst.addCommand(command, this);
+        CommandCache.addCommand(command, this);
     }
 
     @Override
