@@ -2,9 +2,7 @@ package top.cookizi.bot.modle.domain;
 
 import lombok.Data;
 import top.cookizi.bot.common.enums.MsgType;
-import top.cookizi.bot.modle.msg.ImgMsg;
-import top.cookizi.bot.modle.msg.Msg;
-import top.cookizi.bot.modle.msg.PlainTextMsg;
+import top.cookizi.bot.modle.msg.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +51,21 @@ public class SendMsg {
 
         public SendMsgBuilder image(String url, String imageId, String path) {
             sendMsg.msgList.add(new ImgMsg(url, imageId, path));
+            return this;
+        }
+
+        public SendMsgBuilder at(long target){
+            sendMsg.msgList.add(new AtMsg(target));
+            return this;
+        }
+
+        public SendMsgBuilder at(long target,String display){
+            sendMsg.msgList.add(new AtMsg(target,display));
+            return this;
+        }
+
+        public SendMsgBuilder atAll(){
+            sendMsg.msgList.add(new AtAllMsg());
             return this;
         }
 

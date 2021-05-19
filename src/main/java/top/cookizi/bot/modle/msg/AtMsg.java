@@ -19,6 +19,17 @@ public class AtMsg extends Msg {
 
     private String display;
 
+    public AtMsg(long target) {
+        super();
+        this.target = target;
+    }
+
+    public AtMsg(long target, String display) {
+        super();
+        this.target = target;
+        this.display = display;
+    }
+
     @Override
     public String getType() {
         return MsgChainType.AT.type;

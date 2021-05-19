@@ -2,7 +2,6 @@ package top.cookizi.bot.modle.msg;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import top.cookizi.bot.common.enums.MsgChainType;
 
 /**
@@ -11,11 +10,14 @@ import top.cookizi.bot.common.enums.MsgChainType;
  * @description
  */
 @Data
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class AtAllMsg extends Msg{
 
     private long target;
+
+    public AtAllMsg() {
+        super();
+    }
 
     @Override
     public String getType() {
