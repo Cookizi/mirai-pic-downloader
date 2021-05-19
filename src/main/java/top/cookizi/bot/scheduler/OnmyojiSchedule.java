@@ -107,7 +107,7 @@ public class OnmyojiSchedule {
             default:
                 return;
         }
-        sendMsgToGroupList(SendMsg.TextMsg(msg));
+        sendMsgToGroupList(SendMsg.builder().text(msg).atAll().build());
     }
 
     @Scheduled(cron = "0 45 21 * * ? ")
