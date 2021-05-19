@@ -14,6 +14,8 @@ public enum MsgChainType {
     IMAGE("Image", ImgMsg.class),
     PLAIN("Plain", PlainTextMsg.class),
     SOURCE("Source", SourceMsg.class),
+    AT("At", AtMsg.class),
+    AT_ALL("AtAll", AtAllMsg.class),
     ;
     public final String type;
     public final Class<? extends Msg> clazz;
