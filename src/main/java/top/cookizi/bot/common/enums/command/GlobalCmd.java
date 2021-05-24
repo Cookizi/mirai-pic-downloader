@@ -1,7 +1,9 @@
 package top.cookizi.bot.common.enums.command;
 
 import top.cookizi.bot.cache.CommandCache;
+import top.cookizi.bot.common.utils.AppUtils;
 import top.cookizi.bot.modle.domain.CmdRes;
+import top.cookizi.bot.service.MiraiApiService;
 
 import java.util.function.Function;
 
@@ -13,6 +15,8 @@ import java.util.function.Function;
 public enum GlobalCmd implements ICommand {
 
     SESSION_RESET("session", (commands) -> {
+        MiraiApiService apiService = AppUtils.getBean(MiraiApiService.class);
+        apiService.resetSession();
         return CmdRes.BeanCmd();
     });
 

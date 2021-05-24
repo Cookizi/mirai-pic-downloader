@@ -11,7 +11,6 @@ import top.cookizi.bot.common.utils.StringUtils;
 import top.cookizi.bot.modle.domain.CmdRes;
 import top.cookizi.bot.modle.domain.SendMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
-import top.cookizi.bot.service.MiraiApiService;
 import top.cookizi.bot.service.MsgSendService;
 
 /**
@@ -25,8 +24,6 @@ public class CommandHandle {
 
     @Autowired
     private MsgSendService msgSendService;
-    @Autowired
-    private MiraiApiService apiService;
 
     public static boolean isCommand(String text) {
         if (StringUtils.isBlank(text)) {
@@ -56,15 +53,6 @@ public class CommandHandle {
                             ",e:" + e.getMessage());
             e.printStackTrace();
             return;
-        }
-
-        if (cmdRes.isBeanCmd()) {
-            switch (commands[0]) {
-                case "session":
-                    apiService.resetSession();
-                    break;
-                default:
-            }
         }
 
         if (cmdRes.isSendMsg()) {
