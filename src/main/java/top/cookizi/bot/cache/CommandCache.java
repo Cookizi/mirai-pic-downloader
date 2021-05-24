@@ -34,6 +34,9 @@ public class CommandCache {
     }
 
     public static void addCommand(String command, ICommand iCommand) {
+        if (COMMAND_MAP.get(command) != null) {
+            log.warn("command has exist :{}", command);
+        }
         COMMAND_MAP.put(command, iCommand);
     }
 
