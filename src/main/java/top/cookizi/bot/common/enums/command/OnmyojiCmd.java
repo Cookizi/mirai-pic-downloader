@@ -1,6 +1,5 @@
 package top.cookizi.bot.common.enums.command;
 
-import lombok.AllArgsConstructor;
 import top.cookizi.bot.cache.CommandCache;
 import top.cookizi.bot.modle.domain.CmdRes;
 import top.cookizi.bot.modle.domain.SendMsg;
@@ -12,10 +11,9 @@ import java.util.function.Function;
  * @version 1.0
  * @date 2021/5/15 23:32
  */
-@AllArgsConstructor
 public enum OnmyojiCmd implements ICommand {
 
-    MONDAY("歌姬", top.cookizi.bot.common.enums.command.Command.ONMYOJI_CMD, (commands) -> {
+    MONDAY("歌姬", (commands) -> {
         return CmdRes.builder().sendMsg(true)
                 .msgBody(SendMsg.builder()
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/173052-veys63um2j.jpeg")
@@ -26,7 +24,7 @@ public enum OnmyojiCmd implements ICommand {
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/173546-ijs6bmgc70.jpeg")
                         .build()).build();
     }),
-    TUESDAY("蜃气楼", top.cookizi.bot.common.enums.command.Command.ONMYOJI_CMD, (commands) -> {
+    TUESDAY("蜃气楼", (commands) -> {
         return CmdRes.builder().sendMsg(true)
                 .msgBody(SendMsg.builder()
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/173141-aky1p3wzel.jpeg")
@@ -37,7 +35,7 @@ public enum OnmyojiCmd implements ICommand {
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/174303-trs7uvfjml.jpeg")
                         .build()).build();
     }),
-    WEDNESDAY("土蜘蛛", top.cookizi.bot.common.enums.command.Command.ONMYOJI_CMD, (commands) -> {
+    WEDNESDAY("土蜘蛛", (commands) -> {
         return CmdRes.builder().sendMsg(true)
                 .msgBody(SendMsg.builder()
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/173158-ahbspvy7ge.jpeg")
@@ -47,7 +45,7 @@ public enum OnmyojiCmd implements ICommand {
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/174936-09kdi87mpo.jpeg")
                         .build()).build();
     }),
-    THURSDAY("荒骷髅", top.cookizi.bot.common.enums.command.Command.ONMYOJI_CMD, (commands) -> {
+    THURSDAY("荒骷髅", (commands) -> {
         return CmdRes.builder().sendMsg(true)
                 .msgBody(SendMsg.builder()
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/173218-a659u4cr7s.jpeg")
@@ -58,7 +56,7 @@ public enum OnmyojiCmd implements ICommand {
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/175652-dnw4fv8r6s.jpeg")
                         .build()).build();
     }),
-    FRIDAY("地震鲶", top.cookizi.bot.common.enums.command.Command.ONMYOJI_CMD, (commands) -> {
+    FRIDAY("地震鲶", (commands) -> {
         return CmdRes.builder().sendMsg(true)
                 .msgBody(SendMsg.builder()
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/173230-9f8clqioh2.jpeg")
@@ -70,7 +68,7 @@ public enum OnmyojiCmd implements ICommand {
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/180401-r365n8y0kl.jpeg")
                         .build()).build();
     }),
-    WEEKEND("胧车", top.cookizi.bot.common.enums.command.Command.ONMYOJI_CMD, (commands) -> {
+    WEEKEND("胧车", (commands) -> {
         return CmdRes.builder().sendMsg(true)
                 .msgBody(SendMsg.builder()
                         .image("https://ok.166.net/reunionpub/ds/kol/20210428/173239-c5d3ry6egq.jpeg")
@@ -87,9 +85,15 @@ public enum OnmyojiCmd implements ICommand {
 
     public String command;
 
-    public top.cookizi.bot.common.enums.command.Command commandType;
+    public Command commandType;
 
     public Function<String[], ? extends CmdRes> run;
+
+    OnmyojiCmd(String command, Function<String[], ? extends CmdRes> run) {
+        this.command = command;
+        this.commandType = Command.ONMYOJI_CMD;
+        this.run = run;
+    }
 
     @Override
     public void init() {

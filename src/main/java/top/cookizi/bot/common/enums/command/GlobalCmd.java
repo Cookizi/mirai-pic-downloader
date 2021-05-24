@@ -22,13 +22,13 @@ public enum GlobalCmd implements ICommand {
 
     public String command;
 
-    public top.cookizi.bot.common.enums.command.Command commandType;
+    public Command commandType;
 
     public Function<String[], ? extends CmdRes> run;
 
     GlobalCmd(String command, Function<String[], ? extends CmdRes> run) {
         this.command = command;
-        this.commandType = top.cookizi.bot.common.enums.command.Command.GLOBAL_CMD;
+        this.commandType = Command.GLOBAL_CMD;
         this.run = run;
     }
 
