@@ -1,14 +1,12 @@
 package top.cookizi.bot.dispatcher;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.cli.Options;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.common.enums.MsgType;
-import top.cookizi.bot.common.utils.StringUtils;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmd;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmdArg;
@@ -16,7 +14,6 @@ import top.cookizi.bot.dispatcher.annotation.MiraiCmdDefine;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmdOption;
 import top.cookizi.bot.dispatcher.config.*;
 import top.cookizi.bot.manage.mirai.MiraiApiClient;
-import top.cookizi.bot.modle.domain.Group;
 import top.cookizi.bot.modle.domain.Sender;
 import top.cookizi.bot.modle.msg.Msg;
 import top.cookizi.bot.modle.msg.PlainTextMsg;
@@ -25,7 +22,6 @@ import top.cookizi.bot.service.WebSocketService;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -99,6 +95,7 @@ public class MiraiCmdDispatcher {
         cmdDef.setScopeList(Arrays.asList(def.scope()));
         cmdDef.setCmdRespType(def.respType());
         cmdDef.setResponse(def.isResponse());
+        cmdDef.setSpecial(def.special());
 
         List<OptionDefinition> optionDefinitionList = new ArrayList<>();
         List<ArgDefinition> argDefinitionList = new ArrayList<>();
@@ -132,14 +129,17 @@ public class MiraiCmdDispatcher {
                 .map(PlainTextMsg::getText)
                 .collect(Collectors.toList());
         if (cmdList.isEmpty()) {
-            return;
+            List<CmdDefinition> specialCmdList = cmdDefinitionMap.values().stream().filter(CmdDefinition::isSpecial).collect(Collectors.toList());
+            //fixme 现在这里只有 top.cookizi.bot.cmd.AppJumpUrlExtract#extract()一个方法在用，
+            // 后期如果有其他需求的话，需要改
+            execute(msgResp, null, specialCmdList);
+        } else {
+            //解析参数和命令
+            String cmdName = cmdList.get(0);
+            List<CmdDefinition> cmdDefList = getCmdDefList(msgResp, cmdName);
+            //执行命令
+            execute(msgResp, cmdName, cmdDefList);
         }
-        //解析参数和命令
-        String cmdName = cmdList.get(0);
-        List<CmdDefinition> cmdDefList = getCmdDefList(msgResp, cmdName);
-        //执行命令
-        execute(msgResp, cmdName, cmdDefList);
-
     }
 
     private void execute(MsgResp msgResp, String cmdName, List<CmdDefinition> cmdDefList) {

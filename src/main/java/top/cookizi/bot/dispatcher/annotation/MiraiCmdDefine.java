@@ -50,4 +50,12 @@ public @interface MiraiCmdDefine {
      * 简短描述一下功能，获取命令列表的时候可以用
      */
     String desc() default "";
+
+    /**
+     * 用来标记一些需要特殊处理的命令或者监听
+     * <p>
+     * 现阶段命令都是文本形式的，但是出现了需要监听app格式的功能，
+     * 先暂时用这种方法来标记一下，以后看看是否有更好的方法来解决
+     */
+    boolean special() default false;
 }

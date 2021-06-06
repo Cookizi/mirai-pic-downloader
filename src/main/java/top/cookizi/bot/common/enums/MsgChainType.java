@@ -3,6 +3,7 @@ package top.cookizi.bot.common.enums;
 import lombok.AllArgsConstructor;
 import top.cookizi.bot.common.utils.StringUtils;
 import top.cookizi.bot.modle.msg.*;
+import top.cookizi.bot.modle.msg.AppMsg;
 
 @AllArgsConstructor
 public enum MsgChainType {
@@ -11,6 +12,7 @@ public enum MsgChainType {
      */
     NON("null", UnknownMsg.class),
 
+    APP("App", AppMsg.class),
     IMAGE("Image", ImgMsg.class),
     PLAIN("Plain", PlainTextMsg.class),
     SOURCE("Source", SourceMsg.class),

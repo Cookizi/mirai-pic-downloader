@@ -32,6 +32,7 @@ public class CmdDefinition {
     int paramCount;
     boolean isResponse;
     CmdRespType cmdRespType;
+    boolean isSpecial;
 
     //springmvc自带的类型转换器，基本类型转换足够了
     private ConversionService conversionService = DefaultConversionService.getSharedInstance();
