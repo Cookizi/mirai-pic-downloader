@@ -18,11 +18,13 @@ public class OptionDefinition {
     String desc;
     Class<?> paramClass;
     boolean hasArg;
+    boolean required;
     public OptionDefinition(int order,MiraiCmdOption opt,Class<?> paramClass) {
         this.order = order;
         this.name = opt.name();
         this.desc = opt.desc();
         this.hasArg = opt.hasArg();
         this.paramClass = paramClass;
+        this.required = opt.required();
     }
 }

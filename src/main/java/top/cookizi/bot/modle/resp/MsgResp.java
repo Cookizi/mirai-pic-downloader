@@ -3,6 +3,7 @@ package top.cookizi.bot.modle.resp;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import top.cookizi.bot.common.enums.MsgType;
 import top.cookizi.bot.modle.domain.Sender;
 import top.cookizi.bot.modle.msg.Msg;
 

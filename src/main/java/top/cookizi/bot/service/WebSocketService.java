@@ -1,5 +1,6 @@
 package top.cookizi.bot.service;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.WebSocket;
@@ -9,6 +10,7 @@ import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.listener.MiraiWebSocketListener;
 
+@Slf4j
 @Service
 public class WebSocketService {
 
@@ -23,7 +25,7 @@ public class WebSocketService {
 
     public synchronized void connect() {
         String session = miraiApiService.enableWebsocket();
-        System.out.println(session);
+        log.info("get session={}", session);
         MemoryConst.setSession(session);
         OkHttpClient client = new OkHttpClient.Builder()
                 .retryOnConnectionFailure(true)

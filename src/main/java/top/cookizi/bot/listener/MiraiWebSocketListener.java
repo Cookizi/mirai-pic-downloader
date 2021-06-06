@@ -9,7 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.config.AppConfig;
+import top.cookizi.bot.dispatcher.MiraiCmdDispatcher;
 import top.cookizi.bot.modle.resp.MsgResp;
 import top.cookizi.bot.service.MsgHandleService;
 import top.cookizi.bot.service.MiraiApiService;
@@ -27,6 +29,8 @@ public class MiraiWebSocketListener extends WebSocketListener {
     private MiraiApiService miraiApiService;
     @Autowired
     private MsgHandleService msgHandleService;
+    @Autowired
+    private MiraiCmdDispatcher miraiCmdDispatcher;
 
 
     @Autowired
@@ -57,10 +61,10 @@ public class MiraiWebSocketListener extends WebSocketListener {
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
         log.warn("发生错误，与mirai断开连接，异常信息:{}", t.getMessage(), t);
         log.info("释放原有session");
-        String sessionKey = webSocket.request().url().queryParameter("sessionKey");
-        miraiApiService.releaseSession(sessionKey);
+        miraiApiService.releaseSession(MemoryConst.getSession());
         log.info("重新获取session");
         String session = miraiApiService.enableWebsocket();
+        MemoryConst.setSession(session);
 
         log.info("开始尝试重新连接");
         Request request = new Request.Builder()
@@ -72,9 +76,10 @@ public class MiraiWebSocketListener extends WebSocketListener {
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
         log.info("收到原始消息：{}", text);
-        String sessionKey = webSocket.request().url().queryParameter("sessionKey");
         MsgResp msgResp = goodGson.fromJson(text, MsgResp.class);
-        msgHandleService.messageHandle(msgResp, sessionKey);
+//        msgHandleService.messageHandle(msgResp, sessionKey);
+        miraiCmdDispatcher.doDispatcher(msgResp);
+
     }
 
     @Override

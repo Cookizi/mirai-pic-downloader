@@ -20,7 +20,7 @@ public class CommonsCliTest {
 
 // create the Options
         Options options = new Options();
-        options.addOption( "a", "all", false, "do not hide entries starting with ." );
+        /*options.addOption( "a", "all", false, "do not hide entries starting with ." );
         options.addOption( "A", "almost-all", false, "do not list implied . and .." );
         options.addOption( "b", "escape", false, "print octal escapes for nongraphic "
                 + "characters" );
@@ -35,10 +35,10 @@ public class CommonsCliTest {
                 + "modification of file status information) with "
                 + "-l:show ctime and sort by name otherwise: sort "
                 + "by ctime" );
-        options.addOption( "C", false, "list entries by columns" );
-        options.addOption( "d", true, "有参数测试" );
+        options.addOption( "C", false, "list entries by columns" );*/
+        options.addOption( "dd", true, "有参数测试" );
 
-        String[] args = "-a -d=d参数  xxx.jpg".split("\\s+");
+        String[] args = "-dd=d参数  xxx.jpg".split("\\s+");
 
         try {
             // parse the command line arguments

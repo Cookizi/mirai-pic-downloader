@@ -28,4 +28,9 @@ public @interface MiraiCmdOption {
     boolean hasArg() default true;
 
     String defaultValue() default "";
+
+    /**
+     * 是否必填
+     */
+    boolean required() default true;
 }

@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.apache.commons.cli.*;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
+import top.cookizi.bot.modle.resp.MsgResp;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -22,47 +23,65 @@ public class CmdDefinition {
     Object cmdBean;
     Method cmdExecuteMethod;
     String name;
-    boolean parseText;
+    CmdType cmdType;
     //可自行范围，默认是全都可以
     List<CommandScope> scopeList = new ArrayList<>();
     //命令包含的参数，
-    List<OptionDefinition> optionDefinitionList = new ArrayList<>();
+    List<OptionDefinition> optionDefinitionList;
+    List<ArgDefinition> argDefinitionList;
+    int paramCount;
+    boolean isResponse;
+    CmdRespType cmdRespType;
 
     //springmvc自带的类型转换器，基本类型转换足够了
     private ConversionService conversionService = DefaultConversionService.getSharedInstance();
 
     //执行命令
-    public void execute(String cmd) throws Exception {
-        //不需要解析命令的直接执行
-        if (!parseText) {
-            cmdExecuteMethod.invoke(cmdBean, cmd);
-            return;
+    public Object execute(String cmd, MsgResp msgResp) throws Exception {
+        //设置为监听状态的命令需要自己解析
+        if (cmdType == CmdType.LISTENER) {
+            return cmdExecuteMethod.invoke(cmdBean, msgResp);
         }
         CommandLine cmdLine = parseCmd(cmd);
 
-        optionDefinitionList.sort(Comparator.comparingInt(OptionDefinition::getOrder));
-        int paramCount = optionDefinitionList.size();
-
         Object[] cmdParamValues = new Object[paramCount];
-        for (int i = 0; i < paramCount; i++) {
-            OptionDefinition optDef = optionDefinitionList.get(i);
+
+        List<String> argList = cmdLine.getArgList();
+        argDefinitionList.sort(Comparator.comparingInt(ArgDefinition::getOrder));
+        if (argList.size() < argDefinitionList.size()) {
+            throw new RuntimeException("参数缺失");
+        }
+        //填充参数
+        for (int i = 0; i < argDefinitionList.size(); i++) {
+            ArgDefinition argDefinition = argDefinitionList.get(i);
+            Object paramValue = conversionService.convert(argList.get(i), argDefinition.getParamClass());
+            cmdParamValues[argDefinition.getOrder()] = paramValue;
+        }
+        //填充option
+        optionDefinitionList.sort(Comparator.comparingInt(OptionDefinition::getOrder));
+        for (OptionDefinition optDef : optionDefinitionList) {
             String optionValue = cmdLine.getOptionValue(optDef.getName());
             Object paramValue = conversionService.convert(optionValue, optDef.getParamClass());
-            cmdParamValues[i] = paramValue;
+            cmdParamValues[optDef.getOrder()] = paramValue;
         }
-        cmdExecuteMethod.invoke(cmdBean, cmdParamValues);
+        return cmdExecuteMethod.invoke(cmdBean, cmdParamValues);
 
     }
 
     //解析命令
     private CommandLine parseCmd(String cmd) throws ParseException {
         String[] argsWithCmd = cmd.split("\\s+");
-        String[] args = new String[]{};
-        System.arraycopy(argsWithCmd, 1, args, 0, argsWithCmd.length - 2);
+        String[] args = new String[argsWithCmd.length - 1];
+        System.arraycopy(argsWithCmd, 1, args, 0, args.length);
         Options options = new Options();
-        optionDefinitionList.forEach(x -> options.addOption(x.getName(), x.isHasArg(), x.getDesc()));
+        for (OptionDefinition optDef : optionDefinitionList) {
+
+            Option opt = new Option(optDef.getName(), optDef.isHasArg(), optDef.getDesc());
+            opt.setRequired(optDef.isRequired());
+            options.addOption(opt);
+        }
         CommandLineParser parser = new DefaultParser();
-        return parser.parse(options, args);
+        return parser.parse(options, args, true);
 
     }
 }

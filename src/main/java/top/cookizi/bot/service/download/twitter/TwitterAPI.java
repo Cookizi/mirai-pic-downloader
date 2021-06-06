@@ -2,6 +2,7 @@ package top.cookizi.bot.service.download.twitter;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Component
 public class TwitterAPI {
     String AUTH = "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA";
@@ -93,7 +95,7 @@ public class TwitterAPI {
 
     }
 
-    public List<String> tweet(String url) throws IOException {
+    public List<String> tweet(String url) {
         Matcher matcher = Pattern.compile(".*/status/([0-9]+).*").matcher(url);
         List<String> result = new ArrayList<>();
         if (!matcher.find()) {
@@ -101,15 +103,20 @@ public class TwitterAPI {
         }
         String id = matcher.group(1);
         String urlApi = String.format("/2/timeline/conversation/%s.json?tweet_mode=extended", id);
-        String resp = this.call(urlApi);
-        JsonObject jsonObject = new Gson().fromJson(resp, JsonObject.class);
-        //obj.globalObjects.tweets.${id}.entities.media[].media_url
-        jsonObject.get("globalObjects").getAsJsonObject()
-                .get("tweets").getAsJsonObject()
-                .get(id).getAsJsonObject()
-                .get("entities").getAsJsonObject()
-                .get("media").getAsJsonArray()
-                .forEach(x -> result.add(x.getAsJsonObject().get("media_url").getAsString()));
-        return result;
+        try {
+            String resp = this.call(urlApi);
+            JsonObject jsonObject = new Gson().fromJson(resp, JsonObject.class);
+            //obj.globalObjects.tweets.${id}.entities.media[].media_url
+            jsonObject.get("globalObjects").getAsJsonObject()
+                    .get("tweets").getAsJsonObject()
+                    .get(id).getAsJsonObject()
+                    .get("entities").getAsJsonObject()
+                    .get("media").getAsJsonArray()
+                    .forEach(x -> result.add(x.getAsJsonObject().get("media_url").getAsString()));
+            return result;
+        } catch (IOException e) {
+            log.warn("下载Twitter图失败，地址={}", url, e);
+        }
+        return new ArrayList<>();
     }
 }

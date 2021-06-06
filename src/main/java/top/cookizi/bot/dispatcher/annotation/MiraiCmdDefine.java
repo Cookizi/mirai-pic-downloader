@@ -1,7 +1,10 @@
 package top.cookizi.bot.dispatcher.annotation;
 
 
+import top.cookizi.bot.dispatcher.config.CmdRespType;
+import top.cookizi.bot.dispatcher.config.CmdType;
 import top.cookizi.bot.dispatcher.config.CommandScope;
+import top.cookizi.bot.modle.resp.MsgResp;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,7 +13,7 @@ import java.lang.annotation.Target;
 
 /**
  * 命令定义
- *
+ * <p>
  * 这个注解定义了各种命令的格式，通过扫描注解的内容来来判断需要走到那个方法来执行。
  */
 @Target(ElementType.METHOD)
@@ -27,14 +30,19 @@ public @interface MiraiCmdDefine {
     CommandScope[] scope() default {CommandScope.ALL};
 
     /**
-     * 文本内容是否需要解析成命令
-     * 如果不需要解析，则直接传输给调用方法来自己解析
+     * 是否需要返回响应，配合返回类型实现不同类型的返回响应信息
      */
-    boolean parseText() default true;
+    boolean isResponse() default true;
 
-    /* *//**
-     * 是否使用网络代理
-     *//*
-    boolean proxy() default false;
-*/
+    /**
+     * 处理之后返回的类型
+     */
+    CmdRespType respType() default CmdRespType.NORMAL;
+
+
+    /**
+     * 命令类型，可以是监听或者普通命令
+     * 如果是监听,参数有且只能是{@link MsgResp}
+     */
+    CmdType cmdType() default CmdType.NORMAL;
 }
