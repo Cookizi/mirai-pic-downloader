@@ -5,6 +5,7 @@ import top.cookizi.bot.modle.msg.Msg;
 import top.cookizi.bot.modle.msg.PlainTextMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,22 +19,18 @@ public class DirectUrlDownloader extends AbstractDownloadService {
     }
 
     @Override
-    public String handleFileName(Msg msg) {
+    public String handleFileName(Msg msg, String url) {
         String[] split = ((PlainTextMsg) msg).getText().split("[./]");
         return split[split.length - 2];
     }
 
     @Override
-    public String handleImageUrl(Msg msg) {
-        return ((PlainTextMsg) msg).getText();
+    public List<String> handleImageUrl(Msg msg) {
+        return Collections.singletonList(((PlainTextMsg) msg).getText());
     }
 
-
     @Override
-    public boolean isTypeMatch(MsgResp msg) {
-        return msg.getMessageChain().stream()
-                .filter(x -> x instanceof PlainTextMsg)
-                .map(x -> (PlainTextMsg) x)
-                .anyMatch(x -> x.getText().matches(".*\\.(jpg|png|gif)"));
+    public boolean isProxy() {
+        return false;
     }
 }

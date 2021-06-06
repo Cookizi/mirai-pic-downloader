@@ -7,6 +7,7 @@ import top.cookizi.bot.modle.msg.ImgMsg;
 import top.cookizi.bot.modle.msg.Msg;
 import top.cookizi.bot.modle.resp.MsgResp;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,19 +23,19 @@ public class FriendImgDownloadService extends AbstractDownloadService {
     }
 
     @Override
-    public String handleFileName(Msg msg) {
+    public String handleFileName(Msg msg, String url) {
 
         return ((ImgMsg) msg).getImageId().replaceAll("[{}]|\\.(jpg)|\\.(png)|\\.(git)", "");
     }
 
     @Override
-    public String handleImageUrl(Msg msg) {
-        return ((ImgMsg) msg).getUrl();
+    public List<String> handleImageUrl(Msg msg) {
+        return Collections.singletonList(((ImgMsg) msg).getUrl());
     }
 
     @Override
-    public boolean isTypeMatch(MsgResp msg) {
-        return msg.getMessageChain().stream().anyMatch(x -> MsgChainType.IMAGE.type.equals(x.getType()));
+    public boolean isProxy() {
+        return false;
     }
 
 

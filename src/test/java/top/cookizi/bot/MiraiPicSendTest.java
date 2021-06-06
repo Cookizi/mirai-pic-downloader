@@ -9,6 +9,7 @@ import top.cookizi.bot.modle.msg.ImgMsg;
 import top.cookizi.bot.modle.msg.Msg;
 import top.cookizi.bot.modle.msg.MusicShareMsg;
 import top.cookizi.bot.modle.resp.AuthResp;
+import top.cookizi.bot.modle.resp.ImgUploadResp;
 import top.cookizi.bot.modle.resp.VerifyResp;
 
 import java.io.File;
@@ -33,7 +34,7 @@ public class MiraiPicSendTest {
 //        String path = "file:////media/cookizi/null/qqBotSavedFile/image/417951F6673C17A6EF2C477045D107B8.jpg";
         String path = "D:\\Desktop\\D706A6EBCDEDE8E.png";
         File file = new File(path);
-        Map<String, String> friend = miraiApiClient.uploadImage(session, "friend", file);
+        ImgUploadResp friend = miraiApiClient.uploadImage(session, "group", file);
         System.out.println(friend);
 
 //        List<Msg> list = Msg.MsgBuilder.newBuilder().append(new ImgMsg(null,null,path)).build();

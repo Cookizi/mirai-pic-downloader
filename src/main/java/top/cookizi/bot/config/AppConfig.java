@@ -29,6 +29,7 @@ public class AppConfig {
     boolean proxy;
     String proxyHost;
     int proxyPort;
+    String miraiHttpApiPath;
 
     public List<Long> getForwardGroups() {
         if (StringUtils.isBlank(forwardGroups)) {

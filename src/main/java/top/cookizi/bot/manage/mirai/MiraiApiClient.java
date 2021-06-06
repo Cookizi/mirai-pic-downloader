@@ -5,6 +5,7 @@ import feign.Param;
 import feign.RequestLine;
 import top.cookizi.bot.modle.msg.Msg;
 import top.cookizi.bot.modle.resp.AuthResp;
+import top.cookizi.bot.modle.resp.ImgUploadResp;
 import top.cookizi.bot.modle.resp.VerifyResp;
 
 import java.io.File;
@@ -29,9 +30,9 @@ public interface MiraiApiClient {
 
     @RequestLine("POST uploadImage")
     @Headers("Content-Type: multipart/form-data")
-    Map<String, String> uploadImage(@Param("sessionKey") String sessionKey,
-                                    @Param("type") String type,
-                                    @Param("img") File img);
+    ImgUploadResp uploadImage(@Param("sessionKey") String sessionKey,
+                              @Param("type") String type,
+                              @Param("img") File img);
 
     @RequestLine("POST sendGroupMessage")
     Map<String, String> sendGroupMessage(@Param("sessionKey") String sessionKey,

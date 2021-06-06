@@ -132,7 +132,6 @@ public class MiraiCmdDispatcher {
                 .map(PlainTextMsg::getText)
                 .collect(Collectors.toList());
         if (cmdList.isEmpty()) {
-            log.debug("没有发现命令");
             return;
         }
         //解析参数和命令
@@ -180,6 +179,7 @@ public class MiraiCmdDispatcher {
         } else {
             //监听可能会有多个
             cmdDefList = cmdDefinitionMap.values().stream().filter(x -> x.getCmdType() == CmdType.LISTENER)
+                    .filter(x -> CommandScope.isScopeMatch(msgResp.getType(), x.getScopeList()))
                     .collect(Collectors.toList());
         }
         return cmdDefList;
