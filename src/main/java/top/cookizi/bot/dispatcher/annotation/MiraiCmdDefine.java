@@ -45,4 +45,9 @@ public @interface MiraiCmdDefine {
      * 如果是监听,参数有且只能是{@link MsgResp}
      */
     CmdType cmdType() default CmdType.NORMAL;
+
+    /**
+     * 简短描述一下功能，获取命令列表的时候可以用
+     */
+    String desc() default "";
 }

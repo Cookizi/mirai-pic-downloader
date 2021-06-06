@@ -62,12 +62,15 @@ public class MiraiCmdDispatcher {
     }
 
     private void defineTheCmd(Class<?> clazz, Object bean) {
-        cmdDefinitionMap = Arrays.stream(clazz.getDeclaredMethods())
+        Arrays.stream(clazz.getDeclaredMethods())
                 .filter(method -> method.getAnnotation(MiraiCmdDefine.class) != null)
                 .map(method -> getCmdDefinition(bean, method))
-                .collect(Collectors.toMap(CmdDefinition::getName, x -> x, (a, b) -> {
-                    throw new RuntimeException("命令定义重复，命令名称：" + a.getName());
-                }));
+                .forEach(cmd -> {
+                    CmdDefinition oldCmd = cmdDefinitionMap.put(cmd.getName(), cmd);
+                    if (oldCmd != null) {
+                        throw new RuntimeException("命令定义重复，命令名称：" + cmd.getName());
+                    }
+                });
 
     }
 
