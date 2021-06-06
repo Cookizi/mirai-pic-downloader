@@ -61,6 +61,12 @@ public class CmdDefinition {
         optionDefinitionList.sort(Comparator.comparingInt(OptionDefinition::getOrder));
         for (OptionDefinition optDef : optionDefinitionList) {
             String optionValue = cmdLine.getOptionValue(optDef.getName());
+            if (optionValue == null) {
+                if (optDef.isHasArg()) {
+                    throw new RuntimeException("参数缺失");
+                }
+                continue;
+            }
             Object paramValue = conversionService.convert(optionValue, optDef.getParamClass());
             cmdParamValues[optDef.getOrder()] = paramValue;
         }

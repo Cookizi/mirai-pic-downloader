@@ -10,8 +10,8 @@ server:
 
 #bot设置
 bot:
-  qq: 2044827989
-  authKey: INITKEYqY2ovydT
+  qq: 1600699908
+  authKey: miraiAuthKey
   #不启动浏览器界面
   driver:
     headless: false
