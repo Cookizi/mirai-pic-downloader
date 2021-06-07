@@ -11,13 +11,18 @@ public enum MsgChainType {
      */
     NON("null", UnknownMsg.class),
 
+    APP("App", AppMsg.class),
     IMAGE("Image", ImgMsg.class),
     PLAIN("Plain", PlainTextMsg.class),
     SOURCE("Source", SourceMsg.class),
     AT("At", AtMsg.class),
     AT_ALL("AtAll", AtAllMsg.class),
+    XML("Xml", XmlMsg.class),
+    MUSIC_SHARE("MusicShare",MusicShareMsg.class),
     ;
+
     public final String type;
+
     public final Class<? extends Msg> clazz;
 
     public static MsgChainType parse(String type) {

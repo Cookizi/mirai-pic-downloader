@@ -1,11 +1,14 @@
 package top.cookizi.bot.manage.mirai;
 
+import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 import top.cookizi.bot.modle.msg.Msg;
 import top.cookizi.bot.modle.resp.AuthResp;
+import top.cookizi.bot.modle.resp.ImgUploadResp;
 import top.cookizi.bot.modle.resp.VerifyResp;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +27,12 @@ public interface MiraiApiClient {
     Map<String, String> sendFriendMessage(@Param("sessionKey") String sessionKey,
                                           @Param("target") Long targetQQ,
                                           @Param("messageChain") List<Msg> messageChain);
+
+    @RequestLine("POST uploadImage")
+    @Headers("Content-Type: multipart/form-data")
+    ImgUploadResp uploadImage(@Param("sessionKey") String sessionKey,
+                              @Param("type") String type,
+                              @Param("img") File img);
 
     @RequestLine("POST sendGroupMessage")
     Map<String, String> sendGroupMessage(@Param("sessionKey") String sessionKey,
