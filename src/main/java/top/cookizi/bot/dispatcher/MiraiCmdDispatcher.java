@@ -13,6 +13,7 @@ import top.cookizi.bot.dispatcher.annotation.MiraiCmdArg;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmdDefine;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmdOption;
 import top.cookizi.bot.dispatcher.config.*;
+import top.cookizi.bot.dispatcher.data.CmdExecuteResult;
 import top.cookizi.bot.manage.mirai.MiraiApiClient;
 import top.cookizi.bot.modle.domain.Sender;
 import top.cookizi.bot.modle.msg.Msg;
@@ -145,9 +146,9 @@ public class MiraiCmdDispatcher {
     private void execute(MsgResp msgResp, String cmdName, List<CmdDefinition> cmdDefList) {
         for (CmdDefinition cmdDef : cmdDefList) {
             try {
-                Object executeResult = cmdDef.execute(cmdName, msgResp);
-                if (cmdDef.isResponse()) {
-                    doResp(cmdDef, executeResult, msgResp);
+                CmdExecuteResult<?> executeResult = cmdDef.execute(cmdName, msgResp);
+                if (executeResult.isResp()) {
+                    doResp(cmdDef, executeResult.getData(), msgResp);
                 }
             } catch (Exception e) {
                 log.warn("执行命令失败，命令名称={}", cmdDef.getName(), e);

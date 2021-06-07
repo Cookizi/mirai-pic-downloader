@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.apache.commons.cli.*;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
+import top.cookizi.bot.dispatcher.data.CmdExecuteResult;
 import top.cookizi.bot.modle.resp.MsgResp;
 
 import java.lang.reflect.Method;
@@ -38,10 +39,15 @@ public class CmdDefinition {
     private ConversionService conversionService = DefaultConversionService.getSharedInstance();
 
     //执行命令
-    public Object execute(String cmd, MsgResp msgResp) throws Exception {
+    public CmdExecuteResult<?> execute(String cmd, MsgResp msgResp) throws Exception {
         //设置为监听状态的命令需要自己解析
         if (cmdType == CmdType.LISTENER) {
-            return cmdExecuteMethod.invoke(cmdBean, msgResp);
+            Object result = cmdExecuteMethod.invoke(cmdBean, msgResp);
+            if (result instanceof CmdExecuteResult) {
+                return (CmdExecuteResult<?>) result;
+            }else {
+                return CmdExecuteResult.ok(result);
+            }
         }
         CommandLine cmdLine = parseCmd(cmd);
 
@@ -71,8 +77,12 @@ public class CmdDefinition {
             Object paramValue = conversionService.convert(optionValue, optDef.getParamClass());
             cmdParamValues[optDef.getOrder()] = paramValue;
         }
-        return cmdExecuteMethod.invoke(cmdBean, cmdParamValues);
-
+        Object result = cmdExecuteMethod.invoke(cmdBean, cmdParamValues);
+        if (result instanceof CmdExecuteResult) {
+            return (CmdExecuteResult<?>) result;
+        }else {
+            return CmdExecuteResult.ok(result);
+        }
     }
 
     //解析命令

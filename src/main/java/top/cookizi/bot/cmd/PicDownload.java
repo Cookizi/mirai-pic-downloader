@@ -6,6 +6,7 @@ import top.cookizi.bot.dispatcher.annotation.MiraiCmd;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmdDefine;
 import top.cookizi.bot.dispatcher.config.CmdType;
 import top.cookizi.bot.dispatcher.config.CommandScope;
+import top.cookizi.bot.dispatcher.data.CmdExecuteResult;
 import top.cookizi.bot.modle.msg.Msg;
 import top.cookizi.bot.modle.msg.PlainTextMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
@@ -27,7 +28,7 @@ public class PicDownload {
 
 
     @MiraiCmdDefine(name = "下图", cmdType = CmdType.LISTENER, desc = "下载站点的图", scope = CommandScope.FRIEND)
-    public List<Msg> downloadImg(MsgResp msgResp) {
+    public CmdExecuteResult<List<Msg>> downloadImg(MsgResp msgResp) {
 
         Msg.MsgBuilder builder = Msg.MsgBuilder.newBuilder();
         for (AbstractDownloadService downloadService : downloadServiceList) {
@@ -49,7 +50,11 @@ public class PicDownload {
                 break;
             }
         }
-        return builder.build();
+        List<Msg> msgList = builder.build();
+        if (msgList.isEmpty()) {
+            return CmdExecuteResult.ignore();
+        }
+        return CmdExecuteResult.ok(msgList);
     }
 
 }
