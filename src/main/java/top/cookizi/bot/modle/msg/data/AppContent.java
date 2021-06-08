@@ -1,17 +1,17 @@
-package top.cookizi.bot.modle.msg.appMsg;
+package top.cookizi.bot.modle.msg.data;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Map;
+
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppContent {
     String app;
-    Config config;
     String desc;
-    Extra extra;
-    Meta meta;
+    Map<String, Map<String, Object>> meta;
     String prompt;
     String ver;
     String view;

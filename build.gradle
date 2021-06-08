@@ -77,6 +77,12 @@ dependencies {
 
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+    //解析xml
+    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1'
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '3.0.1'
+    implementation group: 'com.sun.activation', name: 'jakarta.activation', version: '2.0.1'
+
+
 //    implementation group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.49.0'
 
 //    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
