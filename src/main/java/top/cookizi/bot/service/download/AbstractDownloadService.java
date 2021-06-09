@@ -30,12 +30,6 @@ import java.util.stream.Collectors;
 @Service
 public abstract class AbstractDownloadService {
 
-    protected static final OkHttpClient httpClient = new OkHttpClient.Builder()
-            .callTimeout(Duration.ofMillis(Integer.MAX_VALUE))
-            .connectTimeout(Duration.ofMillis(Integer.MAX_VALUE))
-            .connectionPool(new ConnectionPool())
-            .build();
-
     @Autowired
     protected AppConfig appConfig;
     @Autowired

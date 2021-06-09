@@ -66,10 +66,14 @@ public class ImgForwardService {
             return;
         }
 
-        String source = imgMsgList.stream().map(x -> (PlainTextMsg) x)
+        List<String> source = imgMsgList.stream()
+                .filter(x -> x instanceof PlainTextMsg)
+                .map(x -> (PlainTextMsg) x)
                 .map(PlainTextMsg::getText)
-                .collect(Collectors.joining("\n"));
-        msgList.add(new PlainTextMsg("图片来源：\n" + source));
+                .collect(Collectors.toList());
+        if (!source.isEmpty()) {
+            msgList.add(new PlainTextMsg("图片来源：\n" + source));
+        }
 
 
         appConfig.getForwardGroups()

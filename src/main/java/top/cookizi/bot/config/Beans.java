@@ -30,6 +30,7 @@ public class Beans {
                 .retryOnConnectionFailure(true)
                 .connectionPool(new ConnectionPool())
                 .connectTimeout(60, TimeUnit.SECONDS)
+                .callTimeout(60,TimeUnit.SECONDS)
                 .build();
     }
     @Bean("proxyClient")
@@ -37,7 +38,7 @@ public class Beans {
         return new OkHttpClient.Builder()
                 .retryOnConnectionFailure(true)
                 .connectionPool(new ConnectionPool())
-                .connectTimeout(60, TimeUnit.SECONDS)
+                .callTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60,TimeUnit.SECONDS)
                 .proxy(new Proxy(Proxy.Type.HTTP,new InetSocketAddress(appConfig.getProxyHost(),appConfig.getProxyPort())))
                 .build();
