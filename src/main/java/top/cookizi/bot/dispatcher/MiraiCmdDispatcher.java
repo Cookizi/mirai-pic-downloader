@@ -130,8 +130,10 @@ public class MiraiCmdDispatcher {
                 .map(PlainTextMsg::getText)
                 .collect(Collectors.toList());
         if (cmdList.isEmpty()) {
+            log.info("消息未匹配到命令，尝试执行监听");
             List<CmdDefinition> specialCmdList = cmdDefinitionMap.values().stream()
-                    .filter(x->x.getCmdType()==CmdType.LISTENER)
+                    .filter(x -> x.getCmdType() == CmdType.LISTENER)
+                    .filter(x -> CommandScope.isScopeMatch(msgResp.getType(), x.getScopeList()))
                     .collect(Collectors.toList());
             //fixme 现在这里只有 top.cookizi.bot.cmd.AppJumpUrlExtract#extract()一个方法在用，
             // 后期如果有其他需求的话，需要改
@@ -179,11 +181,6 @@ public class MiraiCmdDispatcher {
                     cmdDefList.add(cmdDefinition);
                 }
             }
-        } else {
-            //监听可能会有多个
-            cmdDefList = cmdDefinitionMap.values().stream().filter(x -> x.getCmdType() == CmdType.LISTENER)
-                    .filter(x -> CommandScope.isScopeMatch(msgResp.getType(), x.getScopeList()))
-                    .collect(Collectors.toList());
         }
         return cmdDefList;
     }

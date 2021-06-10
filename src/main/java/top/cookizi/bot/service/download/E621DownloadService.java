@@ -1,24 +1,43 @@
 package top.cookizi.bot.service.download;
 
+import jakarta.xml.bind.JAXBException;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Component;
 import top.cookizi.bot.modle.msg.Msg;
 import top.cookizi.bot.modle.msg.PlainTextMsg;
+import top.cookizi.bot.modle.msg.XmlMsg;
+import top.cookizi.bot.modle.msg.data.XmlContent;
 import top.cookizi.bot.modle.resp.MsgResp;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class E621DownloadService extends AbstractDownloadService {
+    // 不知道为什么，e621的地址从QQ里面接收到之后变成了xml格式，
+    // 这里抽取出来转换成文本
     @Override
     public List<Msg> handleMsg(MsgResp msg) {
-        return msg.getMessageChain().stream().filter(x -> x instanceof PlainTextMsg)
-                .map(x -> ((PlainTextMsg) x))
-                .filter(x -> x.getText() != null && x.getText().matches("https://e621\\.net/post/show/\\d+"))
-                .collect(Collectors.toList());
+        Msg.MsgBuilder builder = Msg.MsgBuilder.newBuilder();
+        try {
+            for (Msg x : msg.getMessageChain()) {
+                if (x instanceof XmlMsg) {
+                    XmlMsg xmlMsg = (XmlMsg) x;
+                    XmlContent content = xmlMsg.getXmlContent();
+                    String url = content.getUrl();
+                    builder.append(new PlainTextMsg(url));
+                } else if (x instanceof PlainTextMsg) {
+                    builder.append(x);
+                }
+            }
+        } catch (JAXBException e) {
+            log.warn("解析xml失败");
+            throw new RuntimeException("解析e621的xml失败", e);
+        }
+        return builder.build();
     }
 
     @Override
@@ -29,15 +48,15 @@ public class E621DownloadService extends AbstractDownloadService {
 
     @Override
     public List<String> handleImageUrl(Msg msg) {
-        String url = ((PlainTextMsg) msg).getText();
         try {
+            String url = ((PlainTextMsg) msg).getText();
             String imgUrl = Jsoup.connect(url)
                     .get().body().getElementById("image-download-link")
                     .getElementsByTag("a")
                     .attr("href");
             return Collections.singletonList(imgUrl);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn("获取e621图片下载失败", e);
             throw new RuntimeException(e);
         }
     }

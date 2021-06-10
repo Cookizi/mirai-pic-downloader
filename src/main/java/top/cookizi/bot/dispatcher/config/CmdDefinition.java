@@ -3,6 +3,7 @@ package top.cookizi.bot.dispatcher.config;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
@@ -18,6 +19,7 @@ import java.util.List;
  * 命令定义的一些参数
  */
 @Data
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CmdDefinition {
     //需要自行具体逻辑的类的bean
@@ -42,10 +44,11 @@ public class CmdDefinition {
     public CmdExecuteResult<?> execute(String cmd, MsgResp msgResp) throws Exception {
         //设置为监听状态的命令需要自己解析
         if (cmdType == CmdType.LISTENER) {
+            log.info("开始执行监听命令：{}", this.getName());
             Object result = cmdExecuteMethod.invoke(cmdBean, msgResp);
             if (result instanceof CmdExecuteResult) {
                 return (CmdExecuteResult<?>) result;
-            }else {
+            } else {
                 return CmdExecuteResult.ok(result);
             }
         }
@@ -77,10 +80,11 @@ public class CmdDefinition {
             Object paramValue = conversionService.convert(optionValue, optDef.getParamClass());
             cmdParamValues[optDef.getOrder()] = paramValue;
         }
+        log.info("开始执行命令");
         Object result = cmdExecuteMethod.invoke(cmdBean, cmdParamValues);
         if (result instanceof CmdExecuteResult) {
             return (CmdExecuteResult<?>) result;
-        }else {
+        } else {
             return CmdExecuteResult.ok(result);
         }
     }

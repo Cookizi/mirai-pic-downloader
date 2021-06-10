@@ -5,6 +5,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 import top.cookizi.bot.common.enums.MsgChainType;
 import top.cookizi.bot.modle.msg.data.XmlContent;
 
@@ -12,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 @Data
+@Slf4j
 @EqualsAndHashCode(callSuper = true)
 public class XmlMsg extends Msg {
     String xml;

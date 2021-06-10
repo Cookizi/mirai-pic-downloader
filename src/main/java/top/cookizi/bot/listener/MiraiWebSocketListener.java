@@ -79,7 +79,7 @@ public class MiraiWebSocketListener extends WebSocketListener {
         MsgResp msgResp = goodGson.fromJson(text, MsgResp.class);
 //        msgHandleService.messageHandle(msgResp, sessionKey);
         miraiCmdDispatcher.doDispatcher(msgResp);
-
+        log.info("消息处理完成");
     }
 
     @Override

@@ -60,7 +60,7 @@ public abstract class AbstractDownloadService {
 
 
     public List<String> download(List<Msg> imgMsgList) throws Exception {
-        log.info("收到【{}】条图片消息", imgMsgList.size());
+        log.info("收到【{}】条图片消息，开始下载", imgMsgList.size());
 
         List<Future<String>> futureList = imgMsgList.stream()
                 .flatMap(msg -> handleImageUrl(msg).stream()
@@ -86,10 +86,11 @@ public abstract class AbstractDownloadService {
         Msg.MsgBuilder msgBuilder = Msg.MsgBuilder.newBuilder();
         OkHttpClient client = isProxy() ? proxyClient : normalClient;
 
+        log.info("开始下载图片，地址：{}", url);
         byte[] respStream = Objects.requireNonNull(client.newCall(request).execute().body()).bytes();
         ImgSuffixType type = ImgSuffixType.checkType(respStream);
         if (type == ImgSuffixType.OTHER) {
-            log.warn("unknown image type,filename={}", name);
+            log.warn("未知图片类型,filename={}", name);
         }
         String filename = type.getName(name);
         BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(appConfig.getSavePath() + filename));

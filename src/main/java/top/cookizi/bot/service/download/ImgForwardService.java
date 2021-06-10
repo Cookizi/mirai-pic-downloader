@@ -40,22 +40,11 @@ public class ImgForwardService {
      * @param imgNameList 本地图片路径
      */
     public void forward(List<Msg> imgMsgList, List<String> imgNameList) {
-
-      /*  List<Msg> imageList = imgNameList.stream().map(x -> new File(appConfig.getSavePath() + x))
-                .map(file -> threadPoolExecutor.submit(() -> miraiApiClient.uploadImage(MemoryConst.getSession(), "group", file)))
-                .map(f -> {
-                    try {
-                        return f.get();
-                    } catch (Exception e) {
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .map(x -> new ImgMsg(x.getUrl(), x.getImageId(), x.getPath()))
-                .collect(Collectors.toList());*/
+        log.info("开始转发{}张图片到群", imgMsgList.size());
 
         List<File> fileList = imgNameList.stream().map(x -> new File(appConfig.getSavePath() + x)).collect(Collectors.toList());
         List<Msg> msgList = new ArrayList<>();
+        log.info("开始上传图片");
         for (File file : fileList) {
             ImgUploadResp uploadResp = miraiApiClient.uploadImage(MemoryConst.getSession(), "group", file);
             msgList.add(new ImgMsg(uploadResp.getUrl(), uploadResp.getImageId(), uploadResp.getPath()));
@@ -72,26 +61,30 @@ public class ImgForwardService {
                 .map(PlainTextMsg::getText)
                 .collect(Collectors.toList());
         if (!source.isEmpty()) {
-            msgList.add(new PlainTextMsg("图片来源：\n" + source));
+            msgList.add(new PlainTextMsg("来源：\n" + String.join(",", source)));
         }
 
-
+        log.info("图片上传成，开始转发");
         appConfig.getForwardGroups()
                 .forEach(group -> threadPoolExecutor.submit(
                         () -> miraiApiClient.sendGroupMessage(MemoryConst.getSession(), group, msgList)
                         )
                 );
+        threadPoolExecutor.execute(() -> {
+            log.info("开始异步清理缓存");
+            String miraiHttpApiPath = appConfig.getMiraiHttpApiPath();
 
-        String miraiHttpApiPath = appConfig.getMiraiHttpApiPath();
-
-        if (StringUtils.isBlank(miraiHttpApiPath)) {
-            return;
-        }
-        File tempImgDir = new File(miraiHttpApiPath + "/data/net.mamoe.mirai-api-http/images");
-        if (!tempImgDir.exists()) {
-            return;
-        }
-        clearDir(tempImgDir);
+            if (StringUtils.isBlank(miraiHttpApiPath)) {
+                log.info("未配置mcl路径，将不清理缓存");
+                return;
+            }
+            File tempImgDir = new File(miraiHttpApiPath + "/data/net.mamoe.mirai-api-http/images");
+            if (!tempImgDir.exists()) {
+                return;
+            }
+            clearDir(tempImgDir);
+            log.info("缓存清理完成");
+        });
     }
 
     private void clearDir(File file) {
