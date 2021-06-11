@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 import top.cookizi.bot.config.AppConfig;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,7 +63,7 @@ public class TwitterAPI {
     private AppConfig appConfig;
 
 
-    private String guest_token() throws IOException {
+    private String guest_token() throws Exception {
 
         Connection.Response response = Jsoup.connect("https://api.twitter.com/1.1/guest/activate.json")
                 .proxy(appConfig.getProxyHost(), appConfig.getProxyPort()).headers(heads)
@@ -76,7 +75,7 @@ public class TwitterAPI {
         return jsonObject.get("guest_token").getAsString();
     }
 
-    private String call(String urlApi) throws IOException {
+    private String call(String urlApi) throws Exception {
 
         String csrf = DigestUtils.md5DigestAsHex(String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8));
         heads.put("x-csrf-token", csrf);
@@ -114,7 +113,7 @@ public class TwitterAPI {
                     .get("media").getAsJsonArray()
                     .forEach(x -> result.add(x.getAsJsonObject().get("media_url").getAsString()));
             return result;
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.warn("下载Twitter图失败，地址={}", url, e);
         }
         return new ArrayList<>();

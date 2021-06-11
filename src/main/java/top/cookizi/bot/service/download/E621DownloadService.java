@@ -30,7 +30,9 @@ public class E621DownloadService extends AbstractDownloadService {
                     String url = content.getUrl();
                     builder.append(new PlainTextMsg(url));
                 } else if (x instanceof PlainTextMsg) {
-                    builder.append(x);
+                    if (((PlainTextMsg) x).getText().startsWith("https://e621.net")) {
+                        builder.append(x);
+                    }
                 }
             }
         } catch (JAXBException e) {
@@ -48,8 +50,11 @@ public class E621DownloadService extends AbstractDownloadService {
 
     @Override
     public List<String> handleImageUrl(Msg msg) {
+        String url = ((PlainTextMsg) msg).getText();
+        if (!url.startsWith("https://e621.net")) {
+            return Collections.emptyList();
+        }
         try {
-            String url = ((PlainTextMsg) msg).getText();
             String imgUrl = Jsoup.connect(url)
                     .get().body().getElementById("image-download-link")
                     .getElementsByTag("a")

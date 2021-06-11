@@ -129,19 +129,21 @@ public class MiraiCmdDispatcher {
                 .map(x -> (PlainTextMsg) x)
                 .map(PlainTextMsg::getText)
                 .collect(Collectors.toList());
-        if (cmdList.isEmpty()) {
-            log.info("消息未匹配到命令，尝试执行监听");
-            List<CmdDefinition> specialCmdList = cmdDefinitionMap.values().stream()
-                    .filter(x -> x.getCmdType() == CmdType.LISTENER)
-                    .filter(x -> CommandScope.isScopeMatch(msgResp.getType(), x.getScopeList()))
-                    .collect(Collectors.toList());
-            //fixme 现在这里只有 top.cookizi.bot.cmd.AppJumpUrlExtract#extract()一个方法在用，
-            // 后期如果有其他需求的话，需要改
-            execute(msgResp, null, specialCmdList);
-        } else {
-            //解析参数和命令
+        log.info("执行监听");
+        List<CmdDefinition> specialCmdList = cmdDefinitionMap.values().stream()
+                .filter(x -> x.getCmdType() == CmdType.LISTENER)
+                .filter(x -> CommandScope.isScopeMatch(msgResp.getType(), x.getScopeList()))
+                .collect(Collectors.toList());
+        execute(msgResp, null, specialCmdList);
+        //解析参数和命令
+        log.info("执行命令");
+        if (!cmdList.isEmpty()) {
             String cmdName = cmdList.get(0);
             List<CmdDefinition> cmdDefList = getCmdDefList(msgResp, cmdName);
+            if (cmdDefList.isEmpty()) {
+                log.info("未发现命令");
+                return;
+            }
             //执行命令
             execute(msgResp, cmdName, cmdDefList);
         }
