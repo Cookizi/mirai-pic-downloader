@@ -10,7 +10,7 @@ import top.cookizi.bot.modle.resp.MsgResp;
 
 import java.lang.reflect.Type;
 
-@Component
+//@Component
 public class MsgTypeAdapter extends BaseJsonDeserializerAdapter<MsgResp> {
 
     @Override
