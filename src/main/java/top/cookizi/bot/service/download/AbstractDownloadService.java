@@ -1,9 +1,10 @@
 package top.cookizi.bot.service.download;
 
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,6 @@ import top.cookizi.bot.modle.resp.MsgResp;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -64,7 +64,7 @@ public abstract class AbstractDownloadService {
 
         List<Future<String>> futureList = imgMsgList.stream()
                 .flatMap(msg -> handleImageUrl(msg).stream()
-                        .map(url -> threadPool.submit(() -> download(url, handleFileName(msg,url))))
+                        .map(url -> threadPool.submit(() -> download(url, handleFileName(msg, url))))
                 ).collect(Collectors.toList());
 
         List<String> result = new ArrayList<>();
@@ -78,7 +78,7 @@ public abstract class AbstractDownloadService {
     /**
      * 下载图片，返回图片名称
      */
-    private String download(String url, String name) throws IOException {
+    public String download(String url, String name) throws IOException {
         Request request = new Request.Builder()
                 .get().url(url)
                 .build();

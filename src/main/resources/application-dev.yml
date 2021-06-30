@@ -2,6 +2,7 @@ bot:
   apiUrl: http://192.168.50.30:8080/
   wsUrl: ws://192.168.50.30:8080/message?sessionKey=
   savePath: D:\
+#  savePath: Z:\qqBotSavedFile\image
   forwardGroups: 1142341316
   proxy-host: 192.168.50.30
   proxy-port: 10809

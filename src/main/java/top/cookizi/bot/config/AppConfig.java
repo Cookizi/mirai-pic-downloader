@@ -30,6 +30,7 @@ public class AppConfig {
     String proxyHost;
     int proxyPort;
     String miraiHttpApiPath;
+    int setuRate = 25;
 
     public List<Long> getForwardGroups() {
         if (StringUtils.isBlank(forwardGroups)) {
