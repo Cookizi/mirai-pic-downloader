@@ -33,10 +33,5 @@ public class FriendImgDownloadService extends AbstractDownloadService {
         return Collections.singletonList(((ImgMsg) msg).getUrl());
     }
 
-    @Override
-    public boolean isProxy() {
-        return false;
-    }
-
 
 }

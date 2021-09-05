@@ -1,3 +1,4 @@
+/*
 package top.cookizi.bot.service.command;
 
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +16,13 @@ import top.cookizi.bot.service.MsgSendService;
 
 import java.util.function.Function;
 
+*/
 /**
  * @author heq
  * @date 2021/5/13 7:17 下午
  * @description
- */
+ *//*
+
 @Service
 @Slf4j
 public class CommandHandle {
@@ -83,3 +86,4 @@ public class CommandHandle {
     }
 
 }
+*/

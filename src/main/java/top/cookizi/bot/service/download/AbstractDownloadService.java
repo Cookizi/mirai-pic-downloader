@@ -3,22 +3,15 @@ package top.cookizi.bot.service.download;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import top.cookizi.bot.common.enums.ImgSuffixType;
-import top.cookizi.bot.common.enums.RespType;
+import top.cookizi.bot.common.utils.ImageUtil;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.manage.mirai.MiraiApiClient;
 import top.cookizi.bot.modle.msg.Msg;
-import top.cookizi.bot.modle.msg.PlainTextMsg;
 import top.cookizi.bot.modle.resp.MsgResp;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -56,7 +49,13 @@ public abstract class AbstractDownloadService {
 
     public abstract List<String> handleImageUrl(Msg msg);
 
-    public abstract boolean isProxy();
+    public boolean isProxy() {
+        return false;
+    }
+
+    public String getSource(Msg msg) {
+        return null;
+    }
 
 
     public List<String> download(List<Msg> imgMsgList) throws Exception {
@@ -64,7 +63,7 @@ public abstract class AbstractDownloadService {
 
         List<Future<String>> futureList = imgMsgList.stream()
                 .flatMap(msg -> handleImageUrl(msg).stream()
-                        .map(url -> threadPool.submit(() -> download(url, handleFileName(msg, url))))
+                        .map(url -> threadPool.submit(() -> download(url, handleFileName(msg, url), getSource(msg))))
                 ).collect(Collectors.toList());
 
         List<String> result = new ArrayList<>();
@@ -78,28 +77,13 @@ public abstract class AbstractDownloadService {
     /**
      * 下载图片，返回图片名称
      */
-    public String download(String url, String name) throws IOException {
-        Request request = new Request.Builder()
-                .get().url(url)
-                .build();
+    public String download(String url, String name, String source) throws Exception {
+        Request request = new Request.Builder().get().url(url).build();
 
-        Msg.MsgBuilder msgBuilder = Msg.MsgBuilder.newBuilder();
         OkHttpClient client = isProxy() ? proxyClient : normalClient;
-
         log.info("开始下载图片，地址：{}", url);
-        byte[] respStream = Objects.requireNonNull(client.newCall(request).execute().body()).bytes();
-        ImgSuffixType type = ImgSuffixType.checkType(respStream);
-        if (type == ImgSuffixType.OTHER) {
-            log.warn("未知图片类型,filename={}", name);
-        }
-        String filename = type.getName(name);
-        BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(appConfig.getSavePath() + filename));
 
-        outputStream.write(respStream);
-        outputStream.flush();
-        outputStream.close();
-        msgBuilder.append(new PlainTextMsg(RespType.DOWNLOAD_SUCCESS.respText(filename)));
-
-        return filename;
+        var respBytes = Objects.requireNonNull(client.newCall(request).execute().body()).bytes();
+        return ImageUtil.write(respBytes, name, appConfig.getSavePath(), source);
     }
 }

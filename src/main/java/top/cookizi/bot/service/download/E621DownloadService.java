@@ -67,8 +67,8 @@ public class E621DownloadService extends AbstractDownloadService {
     }
 
     @Override
-    public boolean isProxy() {
-        return false;
+    public String getSource(Msg msg) {
+        PlainTextMsg textMsg = (PlainTextMsg) msg;
+        return textMsg.getText();
     }
-
 }

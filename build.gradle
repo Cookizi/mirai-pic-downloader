@@ -23,7 +23,7 @@ version = "1.0-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(8)
+        languageVersion = JavaLanguageVersion.of(11)
     }
 }
 repositories {
@@ -100,6 +100,12 @@ dependencies {
 //    implementation group: 'org.mozilla', name: 'rhino', version: '1.7.13'
     implementation("commons-cli:commons-cli:1.4")
     implementation("com.google.code.gson:gson:2.8.6")
+    implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
+
+    implementation 'com.drewnoakes:metadata-extractor:2.16.0'
+    implementation 'org.apache.commons:commons-imaging:1.0-alpha2'
+//    implementation 'com.groupdocs:groupdocs-metadata:20.5:javadoc'
+    implementation 'com.google.appengine:mediautil:0.2'
     compileOnly("org.fusesource.jansi:jansi:2.3.2")
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

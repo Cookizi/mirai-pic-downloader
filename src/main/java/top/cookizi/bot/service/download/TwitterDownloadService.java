@@ -34,9 +34,7 @@ public class TwitterDownloadService extends AbstractDownloadService {
     @Override
     public List<String> handleImageUrl(Msg msg) {
         String text = ((PlainTextMsg) msg).getText();
-
-       return twitterAPI.tweet(text);
-
+        return twitterAPI.tweet(text);
     }
 
     @Override
@@ -44,5 +42,11 @@ public class TwitterDownloadService extends AbstractDownloadService {
         return true;
     }
 
+    @Override
+    public String getSource(Msg msg) {
+        PlainTextMsg textMsg = (PlainTextMsg) msg;
+        return textMsg.getText();
+
+    }
 }
 

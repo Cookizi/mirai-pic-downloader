@@ -1,3 +1,4 @@
+/*
 package top.cookizi.bot.service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +13,13 @@ import top.cookizi.bot.service.command.CommandHandle;
 
 import java.util.List;
 
+*/
 /**
  * @author heq
  * @date 2021/5/13 3:37 下午
  * @description
- */
+ *//*
+
 @Service
 @Slf4j
 public class MsgHandleService {
@@ -24,12 +27,14 @@ public class MsgHandleService {
     @Autowired
     private CommandHandle commandHandle;
 
-    /**
+    */
+/**
      * 接受消息统一入口
      *
      * @param msgResp
      * @param sessionKey
-     */
+     *//*
+
     public void messageHandle(MsgResp msgResp, String sessionKey) {
         MsgType msgType = MsgType.parse(msgResp.getType());
 
@@ -78,3 +83,4 @@ public class MsgHandleService {
 
 
 }
+*/

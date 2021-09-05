@@ -2,11 +2,10 @@ package top.cookizi.bot.manage.mirai;
 
 import feign.Headers;
 import feign.Param;
+import feign.QueryMap;
 import feign.RequestLine;
 import top.cookizi.bot.modle.msg.Msg;
-import top.cookizi.bot.modle.resp.AuthResp;
-import top.cookizi.bot.modle.resp.ImgUploadResp;
-import top.cookizi.bot.modle.resp.VerifyResp;
+import top.cookizi.bot.modle.resp.*;
 
 import java.io.File;
 import java.util.List;
@@ -43,4 +42,7 @@ public interface MiraiApiClient {
     void updateSessionConfig(@Param("sessionKey") String session,
                              @Param("cacheSize") int cacheSize,
                              @Param("enableWebsocket") boolean enableWebsocket);
+
+    @RequestLine("GET groupList")
+    List<GroupInfo> getGroupList(@QueryMap Map<String,Object>  map);
 }

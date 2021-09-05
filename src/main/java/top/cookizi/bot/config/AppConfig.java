@@ -32,6 +32,8 @@ public class AppConfig {
     String miraiHttpApiPath;
     int setuRate = 25;
 
+    List<Long> jobWhiteGroup = new ArrayList<>();
+
     public List<Long> getForwardGroups() {
         if (StringUtils.isBlank(forwardGroups)) {
             return new ArrayList<>();
