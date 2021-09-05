@@ -28,9 +28,4 @@ public class DirectUrlDownloader extends AbstractDownloadService {
     public List<String> handleImageUrl(Msg msg) {
         return Collections.singletonList(((PlainTextMsg) msg).getText());
     }
-
-    @Override
-    public boolean isProxy() {
-        return false;
-    }
 }

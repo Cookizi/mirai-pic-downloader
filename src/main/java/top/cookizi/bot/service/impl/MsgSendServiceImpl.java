@@ -1,3 +1,4 @@
+/*
 package top.cookizi.bot.service.impl;
 
 import com.alibaba.fastjson.JSON;
@@ -13,11 +14,13 @@ import top.cookizi.bot.service.MsgSendService;
 
 import java.util.Map;
 
+*/
 /**
  * @author heq
  * @date 2021/5/13 5:02 下午
  * @description
- */
+ *//*
+
 @Service
 @Slf4j
 public class MsgSendServiceImpl implements MsgSendService {
@@ -55,13 +58,15 @@ public class MsgSendServiceImpl implements MsgSendService {
         return checkSendRes(res);
     }
 
-    /**
+    */
+/**
      * 消息唯一出口方便监控
      *
      * @param sendMsg
      * @param msgType
      * @return
-     */
+     *//*
+
     private Map<String, String> sendMsg(SendMsg sendMsg, MsgType msgType) {
         Map<String, String> res = null;
         switch (msgType) {
@@ -84,3 +89,4 @@ public class MsgSendServiceImpl implements MsgSendService {
         return "0".equals(res.get("code"));
     }
 }
+*/

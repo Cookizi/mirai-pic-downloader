@@ -3,6 +3,7 @@ package top.cookizi.bot.cmd;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import top.cookizi.bot.common.constant.MemoryConst;
+import top.cookizi.bot.common.utils.ImageUtil;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmd;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmdDefine;
@@ -44,9 +45,18 @@ public class RandSetu {
         }
         Random random = new Random(System.currentTimeMillis());
 
-        ImgUploadResp group = miraiApiClient.uploadImage(MemoryConst.getSession(), "group", list[random.nextInt(list.length)]);
+        file = list[random.nextInt(list.length)];
+        ImgUploadResp group = miraiApiClient.uploadImage(MemoryConst.getSession(), "group", file);
 
         builder.append(new ImgMsg(group.getUrl(), group.getImageId(), group.getPath()));
+        try {
+            var comment = ImageUtil.readComment(file);
+            if (comment != null) {
+                builder.append(new PlainTextMsg("来源：" + comment));
+            }
+        } catch (Exception ignored) {
+
+        }
         return CmdExecuteResult.ok(builder.build());
 
     }

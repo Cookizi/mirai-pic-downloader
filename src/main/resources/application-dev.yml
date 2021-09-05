@@ -8,6 +8,7 @@ bot:
   proxy-port: 10809
   mirai-http-api-path:
   proxy: false
+  jobWhiteGroup:
   #tw
   driver:
 #    path: geckodriver.exe

@@ -1,16 +1,19 @@
+/*
 package top.cookizi.bot.common.utils;
+
+import com.google.common.collect.EvictingQueue;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Queue;
+import java.util.concurrent.*;
 
+*/
 /**
  * 一个时间窗口限流器
- */
+ *//*
+
 public class Limiter {
 
     //时间窗口长度，秒
@@ -24,7 +27,7 @@ public class Limiter {
     private int perLimit;
 
     //限流器，保存数据的地方
-    private Map<String, List<Date>> limiter = new ConcurrentHashMap<>();
+    private Map<String, Queue<Date>> limiter = new ConcurrentHashMap<>();
 
     //定期清理超时数据
     ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -38,8 +41,15 @@ public class Limiter {
     }
 
     public boolean isLimited(String key) {
-        List<Date> list = limiter.get(key);
-        if (list.isEmpty()) limiter.remove(key);
+        EvictingQueue<Long> queue = EvictingQueue.<Long>create(maxLimit);
+        EvictingQueue<Long> list = limiter.get(key);
+        if (list == null) {
+            list = EvictingQueue.<Long>create(maxLimit);
+        }
+        if (list.isEmpty()) {
+            limiter.remove(key);
+            return false;
+        }
 
     }
 
@@ -47,10 +57,11 @@ public class Limiter {
         if (limiter.isEmpty()) return;
         Date now = new Date();
         limiter.keySet().forEach(k -> {
-            List<Date> list = limiter.get(k);
+            Queue<Date> list = limiter.get(k);
             list.removeIf(x -> x.before(now));
             if (list.isEmpty())
                 limiter.remove(k);
         });
     }
 }
+*/

@@ -13,7 +13,6 @@ import top.cookizi.bot.cache.CommonCache;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.dispatcher.MiraiCmdDispatcher;
 import top.cookizi.bot.modle.resp.MsgResp;
-import top.cookizi.bot.service.MsgHandleService;
 import top.cookizi.bot.service.MiraiApiService;
 
 @Slf4j
@@ -27,8 +26,8 @@ public class MiraiWebSocketListener extends WebSocketListener {
     private OkHttpClient okHttpClient;
     @Autowired
     private MiraiApiService miraiApiService;
-    @Autowired
-    private MsgHandleService msgHandleService;
+    //    @Autowired
+//    private MsgHandleService msgHandleService;
     @Autowired
     private MiraiCmdDispatcher miraiCmdDispatcher;
 
