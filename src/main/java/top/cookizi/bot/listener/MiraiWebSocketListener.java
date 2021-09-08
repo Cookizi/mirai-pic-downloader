@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import top.cookizi.bot.cache.CommonCache;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.modle.resp.MsgResp;
 import top.cookizi.bot.service.MsgHandleService;
@@ -57,10 +58,10 @@ public class MiraiWebSocketListener extends WebSocketListener {
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
         log.warn("发生错误，与mirai断开连接，异常信息:{}", t.getMessage(), t);
         log.info("释放原有session");
-        String sessionKey = webSocket.request().url().queryParameter("sessionKey");
-        miraiApiService.releaseSession(sessionKey);
+        miraiApiService.releaseSession(CommonCache.getSession());
         log.info("重新获取session");
         String session = miraiApiService.enableWebsocket();
+        CommonCache.setSession(session);
 
         log.info("开始尝试重新连接");
         Request request = new Request.Builder()
