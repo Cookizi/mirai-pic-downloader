@@ -31,10 +31,6 @@ public class AppMsg extends Msg {
     }
 
     public String getJumpUrl() {
-        return getAppContent().getMeta().getNews().getJumpUrl();
-    }
-
-    public String getJumpUrl() {
         Gson gson = new Gson();
         AppContent appContent = gson.fromJson(content, AppContent.class);
         Map<String, Object> news = appContent.getMeta().get("news");
@@ -53,7 +49,7 @@ public class AppMsg extends Msg {
         Config config;
         String desc;
         Extra extra;
-        Meta meta;
+        Map<String, Map<String, Object>> meta;
         String prompt;
         String ver;
         String view;
@@ -70,27 +66,5 @@ public class AppMsg extends Msg {
         int app_type;
         long appid;
         long uin;//QQ号
-    }
-
-    @Data
-    @FieldDefaults(level = AccessLevel.PRIVATE)
-    public static class Meta {
-        News news;
-    }
-
-    @Data
-    @FieldDefaults(level = AccessLevel.PRIVATE)
-    public static class News {
-        String action;
-        String android_pkg_name;
-        int app_type;
-        long appid;
-        String desc;
-        String jumpUrl;
-        String preview;
-        String source_icon;
-        String source_url;
-        String tag;
-        String title;
     }
 }

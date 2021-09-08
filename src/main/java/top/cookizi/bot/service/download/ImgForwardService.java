@@ -3,7 +3,7 @@ package top.cookizi.bot.service.download;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.cookizi.bot.common.constant.MemoryConst;
+import top.cookizi.bot.cache.CommonCache;
 import top.cookizi.bot.common.utils.StringUtils;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.manage.mirai.MiraiApiClient;
@@ -46,7 +46,7 @@ public class ImgForwardService {
         List<Msg> msgList = new ArrayList<>();
         log.info("开始上传图片");
         for (File file : fileList) {
-            ImgUploadResp uploadResp = miraiApiClient.uploadImage(MemoryConst.getSession(), "group", file);
+            ImgUploadResp uploadResp = miraiApiClient.uploadImage(CommonCache.getSession(), "group", file);
             msgList.add(new ImgMsg(uploadResp.getUrl(), uploadResp.getImageId(), uploadResp.getPath()));
         }
 
@@ -67,7 +67,7 @@ public class ImgForwardService {
         log.info("图片上传成，开始转发");
         appConfig.getForwardGroups()
                 .forEach(group -> threadPoolExecutor.submit(
-                        () -> miraiApiClient.sendGroupMessage(MemoryConst.getSession(), group, msgList)
+                        () -> miraiApiClient.sendGroupMessage(CommonCache.getSession(), group, msgList)
                         )
                 );
         threadPoolExecutor.execute(() -> {

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import top.cookizi.bot.common.constant.MemoryConst;
+import top.cookizi.bot.cache.CommonCache;
 import top.cookizi.bot.common.enums.MsgType;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmd;
@@ -210,10 +210,10 @@ public class MiraiCmdDispatcher {
         Sender sender = msgResp.getSender();
         long senderQQ = sender.getId();
         if (msgType == MsgType.FRIEND_MESSAGE) {
-            miraiApiClient.sendFriendMessage(MemoryConst.getSession(), senderQQ, msgChain);
+            miraiApiClient.sendFriendMessage(CommonCache.getSession(), senderQQ, msgChain);
         } else {
             long group = sender.getGroup().getId();
-            miraiApiClient.sendGroupMessage(MemoryConst.getSession(), group, msgChain);
+            miraiApiClient.sendGroupMessage(CommonCache.getSession(), group, msgChain);
         }
     }
 

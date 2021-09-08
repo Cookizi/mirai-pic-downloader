@@ -2,7 +2,7 @@ package top.cookizi.bot.cmd;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import top.cookizi.bot.common.constant.MemoryConst;
+import top.cookizi.bot.cache.CommonCache;
 import top.cookizi.bot.common.utils.ImageUtil;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmd;
@@ -46,7 +46,7 @@ public class RandSetu {
         Random random = new Random(System.currentTimeMillis());
 
         file = list[random.nextInt(list.length)];
-        ImgUploadResp group = miraiApiClient.uploadImage(MemoryConst.getSession(), "group", file);
+        ImgUploadResp group = miraiApiClient.uploadImage(CommonCache.getSession(), "group", file);
 
         builder.append(new ImgMsg(group.getUrl(), group.getImageId(), group.getPath()));
         try {

@@ -4,7 +4,6 @@ package top.cookizi.bot.service.command;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.common.enums.MsgType;
 import top.cookizi.bot.common.enums.command.ICommand;
 import top.cookizi.bot.common.utils.StringUtils;
@@ -48,7 +47,7 @@ public class CommandHandle {
 
         CmdRes cmdRes;
         try {
-            ICommand iCommand = MemoryConst.getCommand(commands[0]);
+            ICommand iCommand = CommonCache.getCommand(commands[0]);
             if (iCommand == null) {
                 return;
             }
