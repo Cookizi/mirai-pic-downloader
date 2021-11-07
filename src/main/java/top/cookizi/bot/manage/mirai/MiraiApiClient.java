@@ -13,11 +13,11 @@ import java.util.Map;
 
 public interface MiraiApiClient {
 
-    @RequestLine("POST auth")
-    AuthResp auth(@Param("authKey") String authKey);
-
     @RequestLine("POST verify")
-    VerifyResp verify(@Param("sessionKey") String sessionKey, @Param("qq") Long qq);
+    AuthResp verify(@Param("verifyKey") String authKey);
+
+    @RequestLine("POST bind")
+    VerifyResp bind(@Param("sessionKey") String sessionKey, @Param("qq") Long qq);
 
     @RequestLine("POST release")
     Map<String, String> release(@Param("sessionKey") String sessionKey, @Param("qq") Long qq);
@@ -44,5 +44,5 @@ public interface MiraiApiClient {
                              @Param("enableWebsocket") boolean enableWebsocket);
 
     @RequestLine("GET groupList")
-    List<GroupInfo> getGroupList(@QueryMap Map<String,Object>  map);
+    BaseResponse<List<GroupInfo>> getGroupList(@QueryMap Map<String,Object>  map);
 }

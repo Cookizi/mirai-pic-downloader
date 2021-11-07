@@ -1,6 +1,6 @@
 bot:
   apiUrl: http://192.168.50.30:8080/
-  wsUrl: ws://192.168.50.30:8080/message?sessionKey=
+  wsUrl: ws://192.168.50.30:8080/message
   savePath: D:\
 #  savePath: Z:\qqBotSavedFile\image
   forwardGroups: 1142341316

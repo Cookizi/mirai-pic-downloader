@@ -1,8 +1,12 @@
 package top.cookizi.bot.listener;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 import okio.ByteString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,24 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import top.cookizi.bot.common.constant.MemoryConst;
-import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.dispatcher.MiraiCmdDispatcher;
 import top.cookizi.bot.modle.resp.MsgResp;
-import top.cookizi.bot.service.MiraiApiService;
+import top.cookizi.bot.service.WebSocketService;
+
+import java.math.BigInteger;
+import java.util.Optional;
 
 @Slf4j
 @Component
 public class MiraiWebSocketListener extends WebSocketListener {
 
     @Autowired
-    private AppConfig appConfig;
-    @Autowired
-    @Qualifier("normalClient")
-    private OkHttpClient okHttpClient;
-    @Autowired
-    private MiraiApiService miraiApiService;
-    //    @Autowired
-//    private MsgHandleService msgHandleService;
+    private WebSocketService webSocketService;
     @Autowired
     private MiraiCmdDispatcher miraiCmdDispatcher;
 
@@ -42,40 +41,41 @@ public class MiraiWebSocketListener extends WebSocketListener {
 
     @Override
     public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
-        log.info("已与Mirai创建连接");
+        log.info("已与Mirai创建连接，响应：{}", response);
     }
 
     @Override
     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-        log.info("已经与mirai断开连接");
+        log.info("已经与mirai断开连接，原因：{}", reason);
     }
 
     @Override
     public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-        log.info("正在与mirai断开连接");
+        log.info("正在与mirai断开连接，原因：{}", reason);
     }
 
 
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
         log.warn("发生错误，与mirai断开连接，异常信息:{}", t.getMessage(), t);
-        log.info("释放原有session");
-        miraiApiService.releaseSession(MemoryConst.getSession());
-        log.info("重新获取session");
-        String session = miraiApiService.enableWebsocket();
-        MemoryConst.setSession(session);
 
         log.info("开始尝试重新连接");
-        Request request = new Request.Builder()
-                .url(appConfig.getWsUrl() + session)
-                .build();
-        okHttpClient.newWebSocket(request, this);
+        webSocketService.connect();
     }
 
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
         log.info("收到原始消息：{}", text);
-        MsgResp msgResp = goodGson.fromJson(text, MsgResp.class);
+        var jsonObject = goodGson.fromJson(text, JsonObject.class);
+        var data = jsonObject.get("data").getAsJsonObject();
+        var code = Optional.ofNullable(data.get("code")).map(JsonElement::getAsBigInteger).map(BigInteger::intValue).orElse(null);
+        if (code != null && code == 0) {
+            var session = data.get("session").getAsString();
+            log.info("获取session = {}", session);
+            MemoryConst.setSession(session);
+            return;
+        }
+        MsgResp msgResp = goodGson.fromJson(data, MsgResp.class);
 //        msgHandleService.messageHandle(msgResp, sessionKey);
         miraiCmdDispatcher.doDispatcher(msgResp);
         log.info("消息处理完成");

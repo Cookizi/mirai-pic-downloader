@@ -55,7 +55,6 @@ public class RandSetu {
                 builder.append(new PlainTextMsg("来源：" + comment));
             }
         } catch (Exception ignored) {
-
         }
         return CmdExecuteResult.ok(builder.build());
 

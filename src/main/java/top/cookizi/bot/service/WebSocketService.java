@@ -3,10 +3,8 @@ package top.cookizi.bot.service;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.WebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.listener.MiraiWebSocketListener;
 
@@ -18,22 +16,18 @@ public class WebSocketService {
     public MiraiWebSocketListener webSocketListener;
 
     @Autowired
-    private MiraiApiService miraiApiService;
-
-    @Autowired
     private AppConfig appConfig;
 
     public synchronized void connect() {
-        String session = miraiApiService.enableWebsocket();
-        log.info("get session={}", session);
-        MemoryConst.setSession(session);
         OkHttpClient client = new OkHttpClient.Builder()
                 .retryOnConnectionFailure(true)
                 .build();
         Request request = new Request.Builder()
-                .url(appConfig.getWsUrl() + session)
+                .url(appConfig.getWsUrl())
+                .header("verifyKey", appConfig.getAuthKey())
+                .header("qq", String.valueOf(appConfig.getQq()))
                 .build();
-        WebSocket webSocket = client.newWebSocket(request, webSocketListener);
+        client.newWebSocket(request, webSocketListener);
 
         try {
             this.wait();
