@@ -3,6 +3,7 @@ package top.cookizi.bot.listener;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.WebSocket;
@@ -30,6 +31,8 @@ public class MiraiWebSocketListener extends WebSocketListener {
     @Autowired
     private MiraiCmdDispatcher miraiCmdDispatcher;
 
+    private long SLEEP_INTERVAL_SEC = 1;
+
 
     @Autowired
     @Qualifier("goodGson")
@@ -41,6 +44,7 @@ public class MiraiWebSocketListener extends WebSocketListener {
 
     @Override
     public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
+        SLEEP_INTERVAL_SEC = 1;
         log.info("已与Mirai创建连接，响应：{}", response);
     }
 
@@ -56,10 +60,12 @@ public class MiraiWebSocketListener extends WebSocketListener {
 
 
     @Override
+    @SneakyThrows
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
         log.warn("发生错误，与mirai断开连接，异常信息:{}", t.getMessage(), t);
 
-        log.info("开始尝试重新连接");
+        log.info("等待{}秒后开始尝试重新连接", ++SLEEP_INTERVAL_SEC);
+        Thread.sleep(SLEEP_INTERVAL_SEC * 1000);
         webSocketService.connect();
     }
 

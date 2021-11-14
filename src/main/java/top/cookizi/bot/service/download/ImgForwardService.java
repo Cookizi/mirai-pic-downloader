@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.cookizi.bot.common.constant.MemoryConst;
-import top.cookizi.bot.common.utils.StringUtils;
 import top.cookizi.bot.config.AppConfig;
 import top.cookizi.bot.manage.mirai.MiraiApiClient;
 import top.cookizi.bot.modle.msg.ImgMsg;
@@ -27,6 +26,9 @@ public class ImgForwardService {
     private AppConfig appConfig;
     @Autowired
     private ThreadPoolExecutor threadPoolExecutor;
+
+    //每次只转发一个群，按照群排序依次转发
+    private int GROUP_FORWARD_SEQ = 0;
 
     /**
      * 转发下载的图片到指定的群里面
@@ -64,35 +66,13 @@ public class ImgForwardService {
             msgList.add(new PlainTextMsg("来源：\n" + String.join(",", source)));
         }
 
-        log.info("图片上传成，开始转发");
-        appConfig.getForwardGroups()
-                .forEach(group -> threadPoolExecutor.submit(
-                        () -> miraiApiClient.sendGroupMessage(MemoryConst.getSession(), group, msgList)
-                        )
-                );
-        threadPoolExecutor.execute(() -> {
-            log.info("开始异步清理缓存");
-            String miraiHttpApiPath = appConfig.getMiraiHttpApiPath();
-
-            if (StringUtils.isBlank(miraiHttpApiPath)) {
-                log.info("未配置mcl路径，将不清理缓存");
-                return;
-            }
-            File tempImgDir = new File(miraiHttpApiPath + "/data/net.mamoe.mirai-api-http/images");
-            if (!tempImgDir.exists()) {
-                return;
-            }
-            clearDir(tempImgDir);
-            log.info("缓存清理完成");
-        });
-    }
-
-    private void clearDir(File file) {
-        File[] files = file.listFiles();
-        if (files == null) return;
-        for (File f : files) {
-            if (f.isDirectory()) clearDir(f);
-            f.delete();
-        }
+        var groups = appConfig.getForwardGroups();
+        GROUP_FORWARD_SEQ = GROUP_FORWARD_SEQ % groups.size();
+        var groupId = groups.get(GROUP_FORWARD_SEQ);
+        log.info("图片上传成，开始转发到群：{}", groupId);
+        threadPoolExecutor.submit(
+                () -> miraiApiClient.sendGroupMessage(MemoryConst.getSession(), groupId, msgList)
+        );
+        GROUP_FORWARD_SEQ++;
     }
 }

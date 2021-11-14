@@ -29,18 +29,19 @@ public class Beans {
         return new OkHttpClient.Builder()
                 .retryOnConnectionFailure(true)
                 .connectionPool(new ConnectionPool())
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .callTimeout(60,TimeUnit.SECONDS)
+                .connectTimeout(2, TimeUnit.MINUTES)
+                .callTimeout(2, TimeUnit.MINUTES)
                 .build();
     }
+
     @Bean("proxyClient")
     public OkHttpClient proxyClient() {
         return new OkHttpClient.Builder()
                 .retryOnConnectionFailure(true)
                 .connectionPool(new ConnectionPool())
                 .callTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60,TimeUnit.SECONDS)
-                .proxy(new Proxy(Proxy.Type.HTTP,new InetSocketAddress(appConfig.getProxyHost(),appConfig.getProxyPort())))
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(appConfig.getProxyHost(), appConfig.getProxyPort())))
                 .build();
     }
 
@@ -52,7 +53,7 @@ public class Beans {
     }
 
     @Bean
-    public ThreadPoolExecutor threadPool(){
+    public ThreadPoolExecutor threadPool() {
         return new ThreadPoolExecutor(1, 10, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
     }
 }
