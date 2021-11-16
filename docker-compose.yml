@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  bot:
+    build:
+      dockerfile: dockerfile
+      context: .
+      image: bot:0.1
+    restart: always
+    container_name: bot
+    volumes:
+#      保持和本机时间一致
+      - /etc/localtime:/etc/localtime
+      - /home/cookizi/disk/data/qqBotSavedFile/image:/botData

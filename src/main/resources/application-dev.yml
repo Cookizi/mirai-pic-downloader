@@ -1,23 +1,15 @@
 bot:
   apiUrl: http://192.168.50.30:8080/
   wsUrl: ws://192.168.50.30:8080/message
-  savePath: D:\
-#  savePath: Z:\qqBotSavedFile\image
-  forwardGroups: 1142341316
+#  savePath: D:\
+  savePath: /botData/
+  forwardGroups:
   proxy-host: 192.168.50.30
   proxy-port: 10809
   mirai-http-api-path:
   proxy: false
   jobWhiteGroup:
-  #tw
-  driver:
-#    path: geckodriver.exe
-#    proxy: http://127.0.0.1:10810/pack/?t=233736
-#    proxy: 127.0.0.1:10809
-    #浏览器类型：firefox,chrome
-    type: chrome
-    timeout: 5
-    profile:
+  setuRate: 80
 
 task:
   executor:

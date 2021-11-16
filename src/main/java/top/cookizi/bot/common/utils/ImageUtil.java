@@ -28,6 +28,9 @@ public class ImageUtil {
     public static String write(byte[] imgBytes, String name, String savePath, String comment) throws IOException, ImageReadException, ImageWriteException {
         var imageFormat = (ImageFormats) Imaging.guessFormat(imgBytes);
         var filename = name + "." + imageFormat.getExtension().toLowerCase(Locale.ROOT);
+        if (!savePath.endsWith("/")) {
+            savePath = savePath + "/";
+        }
         var dst = new File(savePath + filename);
         if (StringUtils.isBlank(comment)) {
             writeDirectly(imgBytes, dst);
