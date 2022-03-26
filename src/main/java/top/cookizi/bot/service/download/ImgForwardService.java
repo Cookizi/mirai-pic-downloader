@@ -2,6 +2,7 @@ package top.cookizi.bot.service.download;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import top.cookizi.bot.common.constant.MemoryConst;
 import top.cookizi.bot.config.AppConfig;
@@ -25,6 +26,7 @@ public class ImgForwardService {
     @Autowired
     private AppConfig appConfig;
     @Autowired
+    @Qualifier("miraiThreadPool")
     private ThreadPoolExecutor threadPoolExecutor;
 
     //每次只转发一个群，按照群排序依次转发
@@ -42,15 +44,19 @@ public class ImgForwardService {
      * @param imgNameList 本地图片路径
      */
     public void forward(List<Msg> imgMsgList, List<String> imgNameList) {
+        var groups = appConfig.getForwardGroups();
+        if (groups.isEmpty()) {
+            log.info("未配置转发群信息");
+            return;
+        }
         log.info("开始转发{}张图片到群", imgMsgList.size());
 
         List<File> fileList = imgNameList.stream().map(x -> new File(appConfig.getSavePath() + x)).collect(Collectors.toList());
         List<Msg> msgList = new ArrayList<>();
         log.info("开始上传图片");
-        for (File file : fileList) {
-            ImgUploadResp uploadResp = miraiApiClient.uploadImage(MemoryConst.getSession(), "group", file);
-            msgList.add(new ImgMsg(uploadResp.getUrl(), uploadResp.getImageId(), uploadResp.getPath()));
-        }
+        fileList.stream().map(file -> miraiApiClient.uploadImage(MemoryConst.getSession(), "group", file))
+                .filter(ImgUploadResp::isValid)
+                .forEach(x -> msgList.add(new ImgMsg(x)));
 
         if (msgList.isEmpty()) {
             log.debug("没有上传成功的图");
@@ -66,7 +72,6 @@ public class ImgForwardService {
             msgList.add(new PlainTextMsg("来源：\n" + String.join(",", source)));
         }
 
-        var groups = appConfig.getForwardGroups();
         GROUP_FORWARD_SEQ = GROUP_FORWARD_SEQ % groups.size();
         var groupId = groups.get(GROUP_FORWARD_SEQ);
         log.info("图片上传成，开始转发到群：{}", groupId);

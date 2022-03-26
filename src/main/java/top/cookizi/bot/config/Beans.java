@@ -52,8 +52,8 @@ public class Beans {
         return builder.create();
     }
 
-    @Bean
+    @Bean(name = "miraiThreadPool")
     public ThreadPoolExecutor threadPool() {
-        return new ThreadPoolExecutor(1, 10, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        return new ThreadPoolExecutor(5, 20, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
     }
 }

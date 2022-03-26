@@ -37,7 +37,7 @@ public @interface MiraiCmdDefine {
     /**
      * 处理之后返回的类型
      */
-    CmdRespType respType() default CmdRespType.NORMAL;
+    CmdRespType respType() default CmdRespType.QUOTE;
 
 
     /**

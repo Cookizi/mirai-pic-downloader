@@ -15,7 +15,6 @@ import top.cookizi.bot.manage.mirai.MiraiApiClient;
 import top.cookizi.bot.modle.msg.ImgMsg;
 import top.cookizi.bot.modle.msg.Msg;
 import top.cookizi.bot.modle.msg.PlainTextMsg;
-import top.cookizi.bot.modle.resp.BaseResponse;
 import top.cookizi.bot.modle.resp.GroupInfo;
 
 import java.io.IOException;
@@ -51,9 +50,8 @@ public class WaterDrinkNotifyJob {
         }
         var api = picType[random.nextInt(picType.length)];
         String url = "http://shibe.online/api/";
-
-  /*
-       try {
+        var msg = Msg.MsgBuilder.newBuilder();
+        try {
             var body = Jsoup.connect(url + api)
                     .data("httpsUrls", "false")
                     .ignoreContentType(true)
@@ -64,15 +62,14 @@ public class WaterDrinkNotifyJob {
                 msg.append(new ImgMsg(img.get(0)));
             }
         } catch (IOException ignored) {
+            log.warn("获取图片失败");
+        }
 
-        }*/
-        
-        var msg = Msg.MsgBuilder.newBuilder()
-                .append(new PlainTextMsg(
-                        String.format("%s小助手提醒您：该%s了。",
-                                words[random.nextInt(words.length)],
-                                words[random.nextInt(words.length)]
-                        )));
+        msg.append(new PlainTextMsg(
+                String.format("%s小助手提醒您：该%s了。",
+                        words[random.nextInt(words.length)],
+                        words[random.nextInt(words.length)]
+                )));
         groupList.forEach(id -> miraiApiClient.sendGroupMessage(MemoryConst.getSession(), id, msg.build()));
 
     }

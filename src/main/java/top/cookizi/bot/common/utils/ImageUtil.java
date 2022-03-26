@@ -25,9 +25,14 @@ import java.util.*;
 
 public class ImageUtil {
 
-    public static String write(byte[] imgBytes, String name, String savePath, String comment) throws IOException, ImageReadException, ImageWriteException {
+    public static String write(byte[] imgBytes, String url, String name, String savePath, String comment) throws IOException, ImageReadException, ImageWriteException {
         var imageFormat = (ImageFormats) Imaging.guessFormat(imgBytes);
-        var filename = name + "." + imageFormat.getExtension().toLowerCase(Locale.ROOT);
+        String filename;
+        if (imageFormat == ImageFormats.UNKNOWN) {
+            filename = getFilename(url);
+        } else {
+            filename = name + "." + imageFormat.getExtension().toLowerCase(Locale.ROOT);
+        }
         if (!savePath.endsWith("/")) {
             savePath = savePath + "/";
         }
@@ -49,6 +54,12 @@ public class ImageUtil {
                 writeDirectly(imgBytes, dst);
         }
         return filename;
+    }
+
+    private static String getFilename(String url) {
+        //"https://video.twimg.com/ext_tw_video/id/pu/vid/1272x720/filename.mp4?tag=12"
+        String[] split = url.split("\\?")[0].split("/");
+        return split[split.length - 1];
     }
 
     public static String readComment(File file) throws IOException, ImageReadException {

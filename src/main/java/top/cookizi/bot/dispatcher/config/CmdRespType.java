@@ -6,5 +6,5 @@ package top.cookizi.bot.dispatcher.config;
 public enum CmdRespType {
     NORMAL, //默认情况，直接返回文本信息
     AT, //@发送命令的人
-    REPLY //回复发送信息的人（可能不太方便做）
+    QUOTE //回复发送信息的人（可能不太方便做）
 }

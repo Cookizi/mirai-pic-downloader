@@ -48,7 +48,7 @@ public class RandSetu {
         file = list[random.nextInt(list.length)];
         ImgUploadResp group = miraiApiClient.uploadImage(MemoryConst.getSession(), "group", file);
 
-        builder.append(new ImgMsg(group.getUrl(), group.getImageId(), group.getPath()));
+        builder.append(new ImgMsg(group));
         try {
             var comment = ImageUtil.readComment(file);
             if (comment != null) {

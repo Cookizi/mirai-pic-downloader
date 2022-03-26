@@ -7,10 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import top.cookizi.bot.common.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -31,6 +28,8 @@ public class AppConfig {
     int proxyPort;
     String miraiHttpApiPath;
     int setuRate = 25;
+    Map<String,String> headers;
+    Map<String,String> cookies;
 
     List<Long> jobWhiteGroup = new ArrayList<>();
 

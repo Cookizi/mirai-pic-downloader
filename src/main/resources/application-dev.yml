@@ -9,7 +9,7 @@ bot:
   mirai-http-api-path:
   proxy: false
   jobWhiteGroup:
-  setuRate: 80
+  setuRate: 50
 
 task:
   executor:

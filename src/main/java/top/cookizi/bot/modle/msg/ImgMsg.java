@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import top.cookizi.bot.common.enums.MsgChainType;
+import top.cookizi.bot.modle.resp.ImgUploadResp;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +20,13 @@ public class ImgMsg extends Msg {
     public ImgMsg(String url) {
         super();
         this.url = url;
+    }
+
+    public ImgMsg(ImgUploadResp resp) {
+        super();
+        this.url = resp.getUrl();
+        this.imageId = resp.getImageId();
+        this.path = resp.getPath();
     }
 
     public ImgMsg(String url, String imageId, String path) {

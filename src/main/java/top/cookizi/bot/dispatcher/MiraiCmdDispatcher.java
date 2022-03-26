@@ -3,6 +3,8 @@ package top.cookizi.bot.dispatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import top.cookizi.bot.common.constant.MemoryConst;
@@ -33,29 +35,32 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class MiraiCmdDispatcher {
+public class MiraiCmdDispatcher implements ApplicationRunner {
     @Autowired
     private WebSocketService webSocketService;
     @Autowired
     private AppConfig appConfig;
     @Autowired
     private MiraiApiClient miraiApiClient;
+    @Autowired
+    private ApplicationContext context;
 
     //<命令名称，命令定义>
     Map<String, CmdDefinition> cmdDefinitionMap = new HashMap<>();
 
     private static final String MSG_RESP = MsgResp.class.getName();
 
-
-    public void init(ApplicationContext context) {
-
+    @Override
+    public void run(ApplicationArguments args) {
+        log.info("启动完毕，初始化参数:{}", appConfig);
         Map<String, Object> miraiCmdObj = context.getBeansWithAnnotation(MiraiCmd.class);
 
         for (Object bean : miraiCmdObj.values()) {
             Class<?> clazz = bean.getClass();
             defineTheCmd(clazz, bean);
         }
-        webSocketService.connect();
+        log.info("命令注册完毕，开始连接bot");
+        webSocketService.connect(this);
     }
 
     private void defineTheCmd(Class<?> clazz, Object bean) {
@@ -209,11 +214,12 @@ public class MiraiCmdDispatcher {
         MsgType msgType = MsgType.parse(msgResp.getType());
         Sender sender = msgResp.getSender();
         long senderQQ = sender.getId();
+        Long mgsId = msgResp.getMsgId();
         if (msgType == MsgType.FRIEND_MESSAGE) {
-            miraiApiClient.sendFriendMessage(MemoryConst.getSession(), senderQQ, msgChain);
+            miraiApiClient.sendFriendMessage(MemoryConst.getSession(), senderQQ, mgsId, msgChain);
         } else {
             long group = sender.getGroup().getId();
-            miraiApiClient.sendGroupMessage(MemoryConst.getSession(), group, msgChain);
+            miraiApiClient.sendGroupMessage(MemoryConst.getSession(), group, mgsId, msgChain);
         }
     }
 

@@ -25,7 +25,15 @@ public interface MiraiApiClient {
     @RequestLine("POST sendFriendMessage")
     Map<String, String> sendFriendMessage(@Param("sessionKey") String sessionKey,
                                           @Param("target") Long targetQQ,
+                                          @Param("quote") Long quoteId,
                                           @Param("messageChain") List<Msg> messageChain);
+
+    default Map<String, String> sendFriendMessage(String sessionKey,
+                                                  Long targetQQ,
+                                                  List<Msg> messageChain) {
+        return sendFriendMessage(sessionKey, targetQQ, null, messageChain)
+                ;
+    }
 
     @RequestLine("POST uploadImage")
     @Headers("Content-Type: multipart/form-data")
@@ -36,7 +44,14 @@ public interface MiraiApiClient {
     @RequestLine("POST sendGroupMessage")
     Map<String, String> sendGroupMessage(@Param("sessionKey") String sessionKey,
                                          @Param("target") Long targetGroup,
+                                         @Param("quote") Long quoteId,
                                          @Param("messageChain") List<Msg> messageChain);
+
+    default Map<String, String> sendGroupMessage(String sessionKey,
+                                                 Long targetGroup,
+                                                 List<Msg> messageChain) {
+        return sendGroupMessage(sessionKey, targetGroup, null, messageChain);
+    }
 
     @RequestLine("POST config")
     void updateSessionConfig(@Param("sessionKey") String session,
@@ -44,5 +59,5 @@ public interface MiraiApiClient {
                              @Param("enableWebsocket") boolean enableWebsocket);
 
     @RequestLine("GET groupList")
-    BaseResponse<List<GroupInfo>> getGroupList(@QueryMap Map<String,Object>  map);
+    BaseResponse<List<GroupInfo>> getGroupList(@QueryMap Map<String, Object> map);
 }

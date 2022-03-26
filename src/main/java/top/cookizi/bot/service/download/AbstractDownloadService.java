@@ -84,6 +84,6 @@ public abstract class AbstractDownloadService {
         log.info("开始下载图片，地址：{}", url);
 
         var respBytes = Objects.requireNonNull(client.newCall(request).execute().body()).bytes();
-        return ImageUtil.write(respBytes, name, appConfig.getSavePath(), source);
+        return ImageUtil.write(respBytes, url, name, appConfig.getSavePath(), source);
     }
 }
