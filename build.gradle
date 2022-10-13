@@ -56,7 +56,7 @@ dependencyManagement {
 
 dependencies {
 //    implementation 'net.mamoe:mirai-slf4j-bridge:1.1.0' // 替换为最新版本
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
     compileOnly group: 'org.apache.poi', name: 'poi-ooxml', version: '3.14'
     compileOnly group: 'com.google.guava', name: 'guava', version: '18.0'
     compileOnly group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.13'
@@ -76,7 +76,7 @@ dependencies {
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
 
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
-    implementation group: 'org.jsoup', name: 'jsoup', version: '1.14.1'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.1'
     //解析xml
     implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1'
     implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '3.0.1'
@@ -102,7 +102,7 @@ dependencies {
     implementation('com.google.code.gson:gson:2.9.0')
     implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
 
-    implementation 'com.drewnoakes:metadata-extractor:2.16.0'
+    implementation 'com.drewnoakes:metadata-extractor:2.18.0'
     implementation 'org.apache.commons:commons-imaging:1.0-alpha2'
 //    implementation 'com.groupdocs:groupdocs-metadata:20.5:javadoc'
     implementation 'com.google.appengine:mediautil:0.2'

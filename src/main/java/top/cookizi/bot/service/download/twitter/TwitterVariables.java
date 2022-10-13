@@ -5,14 +5,13 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 class TwitterVariables {
-    String focalTweetId;
-    boolean with_rux_injections = true;
+    String focalTweetId;//="1540628605612466179";
+    String referrer = "home";
+    boolean controller_data;//="DAACDAABDAABCgABAKEIREECARkKAAKYAgMBgAAiAAMACAQKAAk9dmMcdBGcFwgACwAAAAAPAAwDAAAAERkBAkFECKEAACIAgAEDApgCDgANCgAAAAAKAA4PEdMJ5XBD3AAAAAA=";
+    boolean with_rux_injections = false;
     boolean includePromotedContent = true;
     boolean withCommunity = true;
     boolean withQuickPromoteEligibilityTweetFields = true;
@@ -23,16 +22,13 @@ class TwitterVariables {
     boolean withReactionsPerspective = false;
     boolean withSuperFollowsTweetFields = true;
     boolean withVoice = true;
-    boolean withV2Timeline = false;
-    boolean __fs_dont_mention_me_view_api_enabled = false;
-    boolean __fs_interactive_text_enabled = true;
-    boolean __fs_responsive_web_uc_gql_enabled = false;
+    boolean withV2Timeline = true;
 
     private TwitterVariables(String focalTweetId) {
         this.focalTweetId = focalTweetId;
     }
 
     public static String toJson(String id) {
-        return URLEncoder.encode(new Gson().toJson(new TwitterVariables(id)), StandardCharsets.UTF_8);
+        return new Gson().toJson(new TwitterVariables(id));
     }
 }

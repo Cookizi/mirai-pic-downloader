@@ -42,11 +42,11 @@ public class WebSocketService {
                 .newInstance(this, miraiCmdDispatcher, goodGson, threadPoolExecutor);
         client.newWebSocket(request, listener);
 
-        try {
+        /*try {
             this.wait();
         } catch (InterruptedException ignored) {
 
-        }
+        }*/
     }
 
 }

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 //@PropertySource("classpath:application.yml")
 @ConfigurationProperties(prefix = "bot", ignoreInvalidFields = true)
 public class AppConfig {
+    long admin;
     String authKey;
     long qq;
     String wsUrl;
@@ -28,10 +29,14 @@ public class AppConfig {
     int proxyPort;
     String miraiHttpApiPath;
     int setuRate = 25;
-    Map<String,String> headers;
-    Map<String,String> cookies;
+    Map<String, String> headers;
+    Map<String, String> cookies;
 
     List<Long> jobWhiteGroup = new ArrayList<>();
+
+    public boolean isAdmin(long qq){
+        return this.admin == qq;
+    }
 
     public List<Long> getForwardGroups() {
         if (StringUtils.isBlank(forwardGroups)) {
