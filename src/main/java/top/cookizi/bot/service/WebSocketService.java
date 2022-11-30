@@ -23,6 +23,7 @@ public class WebSocketService {
     @Qualifier("goodGson")
     private Gson goodGson;
     @Autowired
+    @Qualifier("cmdThreadPool")
     private ThreadPoolExecutor threadPoolExecutor;
 
     public void setAppConfig(AppConfig appConfig) {
@@ -41,12 +42,6 @@ public class WebSocketService {
         MiraiWebSocketListener listener = MiraiWebSocketListener
                 .newInstance(this, miraiCmdDispatcher, goodGson, threadPoolExecutor);
         client.newWebSocket(request, listener);
-
-        /*try {
-            this.wait();
-        } catch (InterruptedException ignored) {
-
-        }*/
     }
 
 }

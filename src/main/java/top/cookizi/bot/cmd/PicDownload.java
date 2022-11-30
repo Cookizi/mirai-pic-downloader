@@ -2,6 +2,7 @@ package top.cookizi.bot.cmd;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmd;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmdDefine;
 import top.cookizi.bot.dispatcher.config.CmdType;
@@ -24,6 +25,7 @@ public class PicDownload {
     @Autowired
     private ImgForwardService imgForwardService;
     @Autowired
+    @Qualifier("miraiThreadPool")
     private ThreadPoolExecutor threadPool;
 
 

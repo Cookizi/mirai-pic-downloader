@@ -55,6 +55,11 @@ public class Beans {
 
     @Bean(name = "miraiThreadPool")
     public ThreadPoolExecutor threadPool() {
-        return new ThreadPoolExecutor(5, 20, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        return new ThreadPoolExecutor(50, 50, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+    }
+
+    @Bean(name = "cmdThreadPool")
+    public ThreadPoolExecutor cmdThreadPool() {
+        return new ThreadPoolExecutor(50, 50, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
     }
 }

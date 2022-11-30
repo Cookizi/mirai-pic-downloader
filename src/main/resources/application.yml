@@ -18,4 +18,4 @@ logging:
   level:
     root: info
     top:
-      cookizi: debug
+      cookizi: info

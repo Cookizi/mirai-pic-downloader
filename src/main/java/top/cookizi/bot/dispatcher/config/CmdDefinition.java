@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 命令定义的一些参数
@@ -44,7 +45,7 @@ public class CmdDefinition {
     public CmdExecuteResult<?> execute(String cmd, MsgResp msgResp) throws Exception {
         //设置为监听状态的命令需要自己解析
         if (cmdType == CmdType.LISTENER) {
-            log.info("开始执行监听命令：{}", this.getName());
+            log.debug("开始执行监听命令：{}", this.getName());
             Object result = cmdExecuteMethod.invoke(cmdBean, msgResp);
             if (result instanceof CmdExecuteResult) {
                 return (CmdExecuteResult<?>) result;
@@ -104,5 +105,13 @@ public class CmdDefinition {
         CommandLineParser parser = new DefaultParser();
         return parser.parse(options, args, true);
 
+    }
+
+    public String cmdInfoText() {
+        return "命令名称：" + this.name + "\n" +
+                    "\t参数：\n\t\t" +
+                        this.argDefinitionList.stream().map(ArgDefinition::info).collect(Collectors.joining("\n\t\t\t")) +
+                    "\n\t选项：\n\t\t" +
+                        this.optionDefinitionList.stream().map(OptionDefinition::info).collect(Collectors.joining("\n\t\t\t"));
     }
 }

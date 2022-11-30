@@ -3,15 +3,20 @@ package top.cookizi.bot.cmd;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
+import top.cookizi.bot.dispatcher.MiraiCmdDispatcher;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmd;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmdArg;
 import top.cookizi.bot.dispatcher.annotation.MiraiCmdDefine;
+import top.cookizi.bot.dispatcher.config.CmdDefinition;
 import top.cookizi.bot.dispatcher.config.CommandScope;
 import top.cookizi.bot.service.download.twitter.TwitterFeatures;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @MiraiCmd
 public class AdminCmd {
@@ -39,5 +44,14 @@ public class AdminCmd {
         }
 
         return "添加成功";
+    }
+
+    @Autowired
+    private MiraiCmdDispatcher dispatcher;
+
+    @MiraiCmdDefine(name = "help", scope = CommandScope.FRIEND, desc = "查询所有的命令")
+    public String help() {
+        Map<String, CmdDefinition> cmdMap = dispatcher.getCmdDefinitionMap();
+        return cmdMap.values().stream().map(CmdDefinition::cmdInfoText).collect(Collectors.joining("\n"));
     }
 }

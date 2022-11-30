@@ -13,4 +13,8 @@ import lombok.experimental.FieldDefaults;
 public class ArgDefinition {
     int order;
     Class<?> paramClass;
+
+    public String info(){
+        return String.format("顺序:%s, 类型:%s", order, paramClass.getName());
+    }
 }

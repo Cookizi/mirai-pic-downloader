@@ -75,7 +75,7 @@ public class MiraiWebSocketListener extends WebSocketListener {
 
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-        log.info("收到原始消息：{}", text);
+        log.debug("收到原始消息：{}", text);
         var jsonObject = goodGson.fromJson(text, JsonObject.class);
         var data = jsonObject.get("data").getAsJsonObject();
         var code = Optional.ofNullable(data.get("code")).map(JsonElement::getAsBigInteger).map(BigInteger::intValue).orElse(null);
@@ -89,7 +89,7 @@ public class MiraiWebSocketListener extends WebSocketListener {
 //        msgHandleService.messageHandle(msgResp, sessionKey);
         threadPoolExecutor.execute(() -> miraiCmdDispatcher.doDispatcher(msgResp));
 //        miraiCmdDispatcher.doDispatcher(msgResp);
-        log.info("消息处理完成");
+        log.debug("消息处理完成");
     }
 
     @Override

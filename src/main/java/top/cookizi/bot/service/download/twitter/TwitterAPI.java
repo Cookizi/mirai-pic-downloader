@@ -7,9 +7,7 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import okhttp3.*;
 import okio.ByteString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +20,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -36,6 +35,9 @@ public class TwitterAPI {
     @Autowired
     @Qualifier("proxyClient")
     private OkHttpClient client;
+    @Autowired
+    @Qualifier("miraiThreadPool")
+    private ThreadPoolExecutor executor;
 
 
     String TOKEN_REGEX = "[\"'](AAA[a-zA-Z0-9%-]+%[a-zA-Z0-9%-]+)[\"']";
@@ -68,15 +70,26 @@ public class TwitterAPI {
         appConfig.getHeaders().forEach(builder::addHeader);
         appConfig.getCookies().forEach((k, v) -> builder.addHeader("cookie", String.format("%s=%s", k, v)));
 
-        ByteString byteString = client.newCall(builder.build()).execute().body().byteString();
-//        byte[] bytes = client.newCall(builder.build()).execute().body().bytes();
-
-        String jsonPath = "$.data.threaded_conversation_with_injections_v2.instructions[0].entries[0].content.itemContent.tweet_results.result.legacy.extended_entities.media[*]";
-        JSONArray array = null;
+        Request request = builder.build();
+        ByteString byteString = client.newCall(request).execute().body().byteString();
+        String data = new String(byteString.toByteArray());
+        JSONArray array;
         try {
-            array = JsonPath.read(new ByteArrayInputStream(byteString.toByteArray()), jsonPath);
+            String pathPrefix = "$.data.threaded_conversation_with_injections_v2.instructions[0].entries[0].content.itemContent.tweet_results.result.";
+
+            String typename = JsonPath.read(data, pathPrefix + "__typename");
+            //2022/11/29 推特改了响应体结构
+            if ("TweetWithVisibilityResults".equals(typename)) {
+                pathPrefix = pathPrefix + "tweet.";
+            }
+
+            String jsonPath = pathPrefix + "legacy.extended_entities.media[*]";
+
+            array = JsonPath.read(data, jsonPath);
+
+            follow(request, pathPrefix, data);
         } catch (Exception e) {
-            log.warn("解析json失败，data={}", new String(byteString.toByteArray()));
+            log.warn("解析json失败，data={}", new String(byteString.toByteArray()),e);
             return Lists.newArrayList();
         }
         List<TwitterMedia> twitterMediaList = new Gson().fromJson(array.toJSONString(), new TypeToken<List<TwitterMedia>>() {
@@ -92,6 +105,51 @@ public class TwitterAPI {
 
         return urlList;
 
+    }
+
+    /**
+     * 异步加关注，失败也无所谓
+     */
+    private void follow(Request request, String pathPrefix, String data) {
+        executor.execute(() -> {
+            String userIdPath = pathPrefix + "core.user_results.result.rest_id";
+            String isFollowingPath = pathPrefix + "core.user_results.result.legacy.following";
+            String userId = null;
+            try {
+                Boolean isFollowing = JsonPath.read(data, isFollowingPath);
+                if (isFollowing) {
+                    return;
+                }
+                userId = JsonPath.read(data, userIdPath);
+
+                Headers headers = request.headers();
+                RequestBody b = getFollowRequest(userId);
+
+                String followUrl = "https://twitter.com/i/api/1.1/friendships/create.json";
+
+                Request followRequest = request.newBuilder().url(followUrl).headers(headers).post(b).build();
+                client.newCall(followRequest).execute();
+            } catch (IOException e) {
+                log.warn("failed to follow user id={}", userId);
+            }
+        });
+    }
+
+    private RequestBody getFollowRequest(String userId) {
+        return new FormBody.Builder()
+                .add("include_profile_interstitial_type", "1")
+                .add("include_blocking", "1")
+                .add("include_blocked_by", "1")
+                .add("include_followed_by", "1")
+                .add("include_want_retweets", "1")
+                .add("include_mute_edge", "1")
+                .add("include_can_dm", "1")
+                .add("include_can_media_tag", "1")
+                .add("include_ext_has_nft_avatar", "1")
+                .add("include_ext_is_blue_verified", "1")
+                .add("skip_status", "1")
+                .add("user_id", userId)
+                .build();
     }
 
 

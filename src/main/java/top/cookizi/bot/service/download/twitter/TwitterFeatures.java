@@ -30,6 +30,7 @@ public class TwitterFeatures {
     boolean responsive_web_graphql_timeline_navigation_enabled = false;
     boolean tweetypie_unmention_optimization_enabled = false;
     boolean verified_phone_label_enabled = false;
+    boolean responsive_web_twitter_blue_verified_badge_is_enabled = false;
 
 
     @SneakyThrows

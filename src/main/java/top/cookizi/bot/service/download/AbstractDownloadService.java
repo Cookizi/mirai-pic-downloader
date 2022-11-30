@@ -28,6 +28,7 @@ public abstract class AbstractDownloadService {
     @Autowired
     protected MiraiApiClient miraiApiClient;
     @Autowired
+    @Qualifier("miraiThreadPool")
     private ThreadPoolExecutor threadPool;
     @Autowired
     @Qualifier("normalClient")

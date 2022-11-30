@@ -1,5 +1,6 @@
 package top.cookizi.bot.dispatcher;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class MiraiCmdDispatcher implements ApplicationRunner {
     @Autowired
     private ApplicationContext context;
 
+    @Getter
     //<命令名称，命令定义>
     Map<String, CmdDefinition> cmdDefinitionMap = new HashMap<>();
 
@@ -134,14 +136,14 @@ public class MiraiCmdDispatcher implements ApplicationRunner {
                 .map(x -> (PlainTextMsg) x)
                 .map(PlainTextMsg::getText)
                 .collect(Collectors.toList());
-        log.info("执行监听");
+        log.debug("执行监听");
         List<CmdDefinition> specialCmdList = cmdDefinitionMap.values().stream()
                 .filter(x -> x.getCmdType() == CmdType.LISTENER)
                 .filter(x -> CommandScope.isScopeMatch(msgResp.getType(), x.getScopeList()))
                 .collect(Collectors.toList());
         execute(msgResp, null, specialCmdList);
         //解析参数和命令
-        log.info("执行命令");
+        log.debug("执行命令");
         if (!cmdList.isEmpty()) {
             String cmdName = cmdList.get(0);
             List<CmdDefinition> cmdDefList = getCmdDefList(msgResp, cmdName);
