@@ -9,15 +9,13 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 class TwitterVariables {
     String focalTweetId;//="1540628605612466179";
-    String referrer = "home";
-    boolean controller_data;//="DAACDAABDAABCgABAKEIREECARkKAAKYAgMBgAAiAAMACAQKAAk9dmMcdBGcFwgACwAAAAAPAAwDAAAAERkBAkFECKEAACIAgAEDApgCDgANCgAAAAAKAA4PEdMJ5XBD3AAAAAA=";
     boolean with_rux_injections = false;
     boolean includePromotedContent = true;
     boolean withCommunity = true;
     boolean withQuickPromoteEligibilityTweetFields = true;
-    boolean withBirdwatchNotes = false;
+    boolean withBirdwatchNotes = true;
     boolean withSuperFollowsUserFields = true;
-    boolean withDownvotePerspective = true;
+    boolean withDownvotePerspective = false;
     boolean withReactionsMetadata = false;
     boolean withReactionsPerspective = false;
     boolean withSuperFollowsTweetFields = true;
