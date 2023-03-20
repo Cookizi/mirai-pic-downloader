@@ -18,10 +18,7 @@ import top.cookizi.bot.modle.msg.PlainTextMsg;
 import top.cookizi.bot.modle.resp.GroupInfo;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,10 +31,10 @@ public class WaterDrinkNotifyJob {
     private AppConfig appConfig;
 
     private final String[] picType = new String[]{"shibes", "cats", "birds"};
-    private final String[] words = new String[]{"喝水", "提肛", "doi", "手冲", "饮茶", "拉屎", "摸鱼", "吃鸡"};
+    private final String[] words = new String[]{"喝水", "提肛", "doi", "手冲", "饮茶", "拉屎", "摸鱼", "吃鸡", "吃肠"};
 
 
-    @Scheduled(cron = "0 29 9-20 * * ?")
+    @Scheduled(cron = "0 25 9-19 * * ?")
     public void rinkNotify() {
         final Random random = new Random(System.currentTimeMillis());
         var sessionKey = Map.<String, Object>of("sessionKey", MemoryConst.getSession());
