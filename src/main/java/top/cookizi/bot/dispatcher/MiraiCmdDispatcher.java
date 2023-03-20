@@ -148,7 +148,7 @@ public class MiraiCmdDispatcher implements ApplicationRunner {
             String cmdName = cmdList.get(0);
             List<CmdDefinition> cmdDefList = getCmdDefList(msgResp, cmdName);
             if (cmdDefList.isEmpty()) {
-                log.info("未发现命令");
+                log.debug("未发现命令");
                 return;
             }
             //执行命令

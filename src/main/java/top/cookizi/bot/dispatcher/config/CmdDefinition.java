@@ -81,7 +81,7 @@ public class CmdDefinition {
             Object paramValue = conversionService.convert(optionValue, optDef.getParamClass());
             cmdParamValues[optDef.getOrder()] = paramValue;
         }
-        log.info("开始执行命令");
+        log.info("开始执行命令:{}", cmd);
         Object result = cmdExecuteMethod.invoke(cmdBean, cmdParamValues);
         if (result instanceof CmdExecuteResult) {
             return (CmdExecuteResult<?>) result;
@@ -109,9 +109,9 @@ public class CmdDefinition {
 
     public String cmdInfoText() {
         return "命令名称：" + this.name + "\n" +
-                    "\t参数：\n\t\t" +
-                        this.argDefinitionList.stream().map(ArgDefinition::info).collect(Collectors.joining("\n\t\t\t")) +
-                    "\n\t选项：\n\t\t" +
-                        this.optionDefinitionList.stream().map(OptionDefinition::info).collect(Collectors.joining("\n\t\t\t"));
+                "\t参数：\n\t\t" +
+                this.argDefinitionList.stream().map(ArgDefinition::info).collect(Collectors.joining("\n\t\t\t")) +
+                "\n\t选项：\n\t\t" +
+                this.optionDefinitionList.stream().map(OptionDefinition::info).collect(Collectors.joining("\n\t\t\t"));
     }
 }

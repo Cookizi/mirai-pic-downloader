@@ -1,6 +1,5 @@
 package top.cookizi.bot.service.download.twitter;
 
-import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 import top.cookizi.bot.common.utils.StringUtils;
 import top.cookizi.bot.config.AppConfig;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -49,16 +47,33 @@ public class TwitterAPI {
 
         String id;
 
-        String js = getJsContent(url);
+
+        String body = client.newCall(new Request.Builder().url(url).build())
+                .execute().body()
+                .string();
+
+        String js = getJsContent(body);
         String bearerToken = extractContent(js, TOKEN_REGEX);
         log.debug("bearerToken={}", bearerToken);
-        String queryId = extractContent(js, QUERY_ID_REGEX);
+        String queryId = fetchQueryId(body);
         log.debug("queryId={}", queryId);
         id = extractContent(url, TWITTER_ID_REGEX);
         log.debug("twitter id={}", id);
 
         return getMediaUrls(bearerToken, queryId, id);
 
+    }
+
+    private String fetchQueryId(String body) throws IOException {
+        var reg = "\"endpoints\\.Conversation\":\"(.*?)\"";
+        Matcher matcher = Pattern.compile(reg).matcher(body);
+        matcher.find();
+        String ConversationJsHash = matcher.group(1);
+        String url = String.format("https://abs.twimg.com/responsive-web/client-web-legacy/endpoints.Conversation.%sa.js", ConversationJsHash);
+        String js = client.newCall(new Request.Builder().url(url).build())
+                .execute().body()
+                .string();
+        return extractContent(js, QUERY_ID_REGEX);
     }
 
     private List<String> getMediaUrls(String bearerToken, String queryId, String id) throws IOException {
@@ -89,8 +104,9 @@ public class TwitterAPI {
 
             follow(request, pathPrefix, data);
         } catch (Exception e) {
-            log.warn("解析json失败，data={}", new String(byteString.toByteArray()),e);
-            return Lists.newArrayList();
+            log.warn("解析json失败，data={}", new String(byteString.toByteArray()), e);
+            throw new RuntimeException(String.format("解析json失败，data=%s", new String(byteString.toByteArray())), e);
+
         }
         List<TwitterMedia> twitterMediaList = new Gson().fromJson(array.toJSONString(), new TypeToken<List<TwitterMedia>>() {
         }.getType());
@@ -160,11 +176,7 @@ public class TwitterAPI {
         return matcher.group(1);
     }
 
-    private String getJsContent(String url) throws IOException {
-        String body = client.newCall(new Request.Builder().url(url).build())
-                .execute().body()
-                .string();
-
+    private String getJsContent(String body) throws IOException {
         Pattern compile = Pattern.compile(".*(https://abs.twimg.com/responsive-web/client-web-legacy/main.[a-f0-9]+.js).*");
         Matcher matcher = compile.matcher(body);
         matcher.find();
